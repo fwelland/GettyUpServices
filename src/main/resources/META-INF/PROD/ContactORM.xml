@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<entity-mappings xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence/orm http://xmlns.jcp.org/xml/ns/persistence/orm_2_1.xsd"
+                 version="2.1">
+    <entity class="fhw.model.Contact">
+        <table name="CNTC"/>
+        <secondary-table name="CUST_CNTC"  >
+            <primary-key-join-column name="CNTC_ID" />
+        </secondary-table>
+        <attributes>
+            <id name="id">
+                <column name="CNTC_ID" />
+            </id>
+            <basic name="name">
+                <column name="CNTC_NM"  />
+            </basic>
+            <basic name="firstName">
+                <column name="CNTC_FRST_NM"/>
+            </basic>
+            <basic name="middleName">
+                <column name="CNTC_MDL_NM"/>
+            </basic>
+            <basic name="lastName">
+                <column name="CNTC_LAST_NM"/>
+            </basic>
+            <basic name="createDate">
+                <column name="CRT_DT" />
+                <temporal>DATE</temporal>
+            </basic>
+            <basic name="updateDate">
+                <column name="UPD_DT" />
+                <temporal>DATE</temporal>
+            </basic>
+            <basic name="lastUserToModify">
+                <column name="MOD_USR_ID"/>
+            </basic>
+            <basic name="processedFlag">
+                <column name="PROC_FLG" />
+            </basic>
+            <basic name="type">
+                <column name="CUST_CNTC_TYP_ID" table="CUST_CNTC"/>
+            </basic>
+        </attributes>
+    </entity>
+</entity-mappings>

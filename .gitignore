@@ -1,0 +1,6 @@
+/.nb-gradle/
+/build/
+/.gradle/2.12/taskArtifacts/fileHashes.bin
+/.gradle/2.12/taskArtifacts/fileSnapshots.bin
+/.gradle/2.12/taskArtifacts/taskArtifacts.bin
+/.gradle/2.12/taskArtifacts/cache.properties.lock

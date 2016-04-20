@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<entity-mappings xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence/orm http://xmlns.jcp.org/xml/ns/persistence/orm_2_1.xsd"
+                 version="2.1">
+
+    <entity class="fhw.model.Customer" access="FIELD">
+        <table name="CUST"/>
+        <attributes>
+            <id name="customerId">
+                <column name="CUST_ID"/>
+            </id>
+            <basic name="relationshipBankCustomerId">
+                <column name="REL_BNK_CUST_ID"  />
+            </basic>
+            <basic name="branchId">
+                <column name="BRANCH_ID"/>
+            </basic>
+            <basic name="bankId">
+                <column name="BNK_ID"/>
+            </basic>
+            <basic name="bankBranchId">
+                <column name="BNK_BRANCH_ID"/>
+            </basic>
+            <basic name="classId">
+                <column name="CUST_CLASS_ID"/>
+            </basic>
+            <basic name="mailName">
+                <column name="CUST_MAIL_NM"/>
+            </basic>
+            <basic name="organizationName">
+                <column name="CUST_ORG_NM"/>
+            </basic>
+            <basic name="residenceLocationId">
+                <column name="RES_LCTN_ID"/>
+            </basic>
+            <basic name="citizenshipLocationId">
+                <column name="CTZNSHP_LCTN_ID"/>
+            </basic>
+            <basic name="taxId">
+                <column name="CUST_TAX_ID"/>
+            </basic>
+            <basic name="taxIdType">
+                <column name="TAX_ID_TYP_ID" />
+            </basic>
+            <basic name="taxCompletionDate">
+                <column name="TAX_COMPL_DT"/>
+                <temporal>DATE</temporal>
+            </basic>
+            <basic name="taxCompletionStatusType">
+                <column name="TAX_COMPL_STAT_CD" />
+            </basic>
+            <basic name="cNoticeType">
+                <column name="C_NOTIC_STAT_CD" />
+            </basic>
+            <basic name="cNoticeDate">
+                <column name="C_NOTIC_DT" />
+                <temporal>DATE</temporal>
+            </basic>
+            <basic name="otherId">
+                <column name="OTH_ID_VAL"/>
+            </basic>
+            <basic name="birthDate">
+                <column name="BIRTH_DT" />
+                <temporal>DATE</temporal>
+            </basic>
+            <basic name="deathDate">
+                <column name="DEATH_DT" />
+                <temporal>DATE</temporal>
+            </basic>
+            <basic name="mothersMaidenName">
+                <column name="MOTHERS_MAIDEN_NM"/>
+            </basic>
+            <basic name="referredBy">
+                <column name="REF_BY"/>
+            </basic>
+            <basic name="bankEmployeeIndicator">
+                <column name="BNK_EMPL_IND" />
+            </basic>
+            <basic name="employeeId">
+                <column name="EMPL_ID" />
+            </basic>
+            <basic name="employeeStatus">
+                <column name="EMPL_STAT_ID" />
+            </basic>
+            <basic name="primaryBankOfficeContact">
+                <column name="PRMY_BNK_OFF_CNTC"/>
+            </basic>
+            <basic name="secondaryBankOfficeContact">
+                <column name="SEC_BNK_OFF_CNTC"/>
+            </basic>
+            <basic name="lastCustomerContactDate">
+                <column name="LST_CUST_CNTC_DT" />
+                <temporal>DATE</temporal>
+            </basic>
+            <basic name="createDate">
+                <column name="CRT_DT" />
+                <temporal>DATE</temporal>
+            </basic>
+            <basic name="updateDate">
+                <column name="UPD_DT" />
+                <temporal>DATE</temporal>
+            </basic>
+            <basic name="lastUserToModify">
+                <column name="MOD_USR_ID"/>
+            </basic>
+            <basic name="processedFlag">
+                <column name="PROC_FLG" />
+            </basic>
+            <basic name="otherIdType">
+                <column name="OTH_ID_CD" />
+            </basic>
+            <basic name="customerStatus">
+                <column name="CUST_STAT_ID"/>
+            </basic>
+            <basic name="citizenshipCodeId">
+                <column name="CITZNSHP_CD_ID" />
+            </basic>
+            <basic name="unifiedTaxId">
+                <column name="unified_tax_id" insertable="false" updatable="false" />
+            </basic>
+            <transient name="contacts"/>
+            <one-to-many name="customerContacts"  mapped-by="customer"/>
+        </attributes>
+    </entity>
+
+    <entity class="fhw.model.CustomerContact" access="FIELD">
+        <table name="CUST_CNTC"/>
+<!--        <id-class class="fhw.model.CustomerContactPk"/>-->
+        <attributes>
+            <id  name="contactId">
+                <column name="CNTC_ID"/>
+            </id>
+            <basic name="customerId">
+                <column name="CUST_ID"/>
+            </basic>
+
+            <many-to-one name="customer" fetch="LAZY" >
+                <join-column name="CUST_ID" insertable="false" updatable="false"/>
+            </many-to-one>
+
+            <basic name="type">
+                <column name="CUST_CNTC_TYP_ID" />
+            </basic>
+            <basic name="createDate">
+                <column name="CRT_DT" />
+                <temporal>DATE</temporal>
+            </basic>
+            <basic name="updateDate">
+                <column name="UPD_DT" />
+                <temporal>DATE</temporal>
+            </basic>
+            <basic name="lastUserToModify">
+                <column name="MOD_USR_ID"/>
+            </basic>
+            <basic name="processedFlag">
+                <column name="PROC_FLG" />
+            </basic>
+
+        </attributes>
+    </entity>
+
+</entity-mappings>
+
