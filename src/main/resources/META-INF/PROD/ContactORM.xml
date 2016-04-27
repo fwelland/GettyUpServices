@@ -24,23 +24,58 @@
             <basic name="lastName">
                 <column name="CNTC_LAST_NM"/>
             </basic>
-            <basic name="createDate">
-                <column name="CRT_DT" />
+            <basic name="createDate" access="FIELD">
+                <column name="CRT_DT" table="CUST_CNTC" />                                
+                <column name="CRT_DT" table="CNTC"/>
                 <temporal>DATE</temporal>
             </basic>
-            <basic name="updateDate">
-                <column name="UPD_DT" />
+            <basic name="updateDate" access="FIELD">
+                <column name="UPD_DT" table="CNTC"/>
                 <temporal>DATE</temporal>
             </basic>
-            <basic name="lastUserToModify">
-                <column name="MOD_USR_ID"/>
+            <basic name="lastUserToModify" access="FIELD">
+                <column name="MOD_USR_ID" table="CNTC"/>
             </basic>
-            <basic name="processedFlag">
+            <basic name="processedFlag" access="FIELD">
                 <column name="PROC_FLG" />
             </basic>
             <basic name="type">
                 <column name="CUST_CNTC_TYP_ID" table="CUST_CNTC"/>
+            </basic>            
+            <basic name="customerId">
+                <column name="CUST_ID" table="CUST_CNTC"/>
             </basic>
+
+            
+<!--                                    
+            <basic name="crDt" access="PROPERTY">
+                <column name="CRT_DT" table="CUST_CNTC" />
+                <temporal>DATE</temporal>
+            </basic>
+            <basic name="upDt" access="PROPERTY">
+                <column name="UPD_DT" table="CUST_CNTC"/>
+                <temporal>DATE</temporal>                
+            </basic>
+            
+            <basic name="modUsr" access="PROPERTY">
+                <column name="MOD_USR_ID" table="CUST_CNTC" />
+            </basic>                       
+            -->
+            
+            
+<!--            <basic name="createDate" access="PROPERTY">
+                <column name="CRT_DT" table="CUST_CNTC" />
+                <temporal>DATE</temporal>
+            </basic>-->
+            <basic name="updateDate" access="PROPERTY">
+                <column name="UPD_DT" table="CUST_CNTC"/>
+                <temporal>DATE</temporal>                
+            </basic>
+            
+            <basic name="lastUserToModify" access="PROPERTY">
+                <column name="MOD_USR_ID" table="CUST_CNTC" />
+            </basic>                       
+                        
         </attributes>
     </entity>
 </entity-mappings>

@@ -120,45 +120,8 @@
                 <column name="unified_tax_id" insertable="false" updatable="false" />
             </basic>
             <transient name="contacts"/>
-            <one-to-many name="customerContacts"  mapped-by="customer"/>
+<!--            <one-to-many name="customerContacts"  mapped-by="customer"/>-->
         </attributes>
     </entity>
-
-    <entity class="fhw.model.CustomerContact" access="FIELD">
-        <table name="CUST_CNTC"/>
-<!--        <id-class class="fhw.model.CustomerContactPk"/>-->
-        <attributes>
-            <id  name="contactId">
-                <column name="CNTC_ID"/>
-            </id>
-            <basic name="customerId">
-                <column name="CUST_ID"/>
-            </basic>
-
-            <many-to-one name="customer" fetch="LAZY" >
-                <join-column name="CUST_ID" insertable="false" updatable="false"/>
-            </many-to-one>
-
-            <basic name="type">
-                <column name="CUST_CNTC_TYP_ID" />
-            </basic>
-            <basic name="createDate">
-                <column name="CRT_DT" />
-                <temporal>DATE</temporal>
-            </basic>
-            <basic name="updateDate">
-                <column name="UPD_DT" />
-                <temporal>DATE</temporal>
-            </basic>
-            <basic name="lastUserToModify">
-                <column name="MOD_USR_ID"/>
-            </basic>
-            <basic name="processedFlag">
-                <column name="PROC_FLG" />
-            </basic>
-
-        </attributes>
-    </entity>
-
 </entity-mappings>
 

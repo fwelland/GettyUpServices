@@ -4,6 +4,7 @@ import fhw.model.Contact;
 import fhw.model.Customer;
 import fhw.model.CustomerContact;
 import fhw.model.CustomerContactPk;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -20,7 +21,10 @@ public class Frank
 //        customerFind(em);
 //        customerContact(em);
 //        customer(em);
-        contactFind(em);
+//        contactFind(em);
+        contactSave(em);
+        //contactRemove(em);
+        //contactUpdate(em);
     }
 
     private static void customerContact(EntityManager em)
@@ -62,5 +66,43 @@ public class Frank
         q.setParameter(1, new Long("7905"));
         Contact c = (Contact) q.getSingleResult();
         System.out.println(c);
+    }
+    
+    private static void contactSave(EntityManager em)
+    {
+        em.getTransaction().begin();
+        Contact c = new Contact(); 
+        Date d = new Date(); 
+        c.setName("Matt Welland");
+        c.setFirstName("Fred");
+        c.setLastName("Welland");
+        c.setId(-8945L);        
+        c.setCustomerId(5000041027L);                
+        c.setMiddleName("H");
+        c.setProcessedFlag('S');        
+        c.setCreateDate(d);       
+        c.setUpdateDate(d);
+        c.setLastUserToModify("fhw");        
+        c.setType(1);
+        em.persist(c);        
+        em.getTransaction().commit();
+    }
+    
+    private static void contactRemove(EntityManager em)
+    {
+        em.getTransaction().begin();
+        Contact c = em.find(Contact.class, -8945L); 
+        em.remove(c);
+        em.getTransaction().commit();
+    }    
+    
+    private static void contactUpdate(EntityManager em)
+    {
+        em.getTransaction().begin();
+        Contact c = em.find(Contact.class, -8945L); 
+        c.setName("Matt Ratt");
+        c.setType(6);
+        em.merge(c); 
+        em.getTransaction().commit();        
     }
 }
