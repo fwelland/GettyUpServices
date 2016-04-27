@@ -82,7 +82,7 @@ public class Frank
         c.setProcessedFlag('S');        
         c.setCreateDate(d);       
         c.setUpdateDate(d);
-        c.setLastUserToModify("fhw");        
+        c.setModifyUser("fhw");        
         c.setType(1);
         em.persist(c);        
         em.getTransaction().commit();
