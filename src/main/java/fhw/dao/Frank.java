@@ -22,9 +22,9 @@ public class Frank
 //        customerContact(em);
 //        customer(em);
 //        contactFind(em);
-        contactSave(em);
+        //contactSave(em);
         //contactRemove(em);
-        //contactUpdate(em);
+        contactUpdate(em);
     }
 
     private static void customerContact(EntityManager em)
@@ -102,6 +102,8 @@ public class Frank
         Contact c = em.find(Contact.class, -8945L); 
         c.setName("Matt Ratt");
         c.setType(6);
+        c.setUpdateDate(new Date());
+        c.setModifyUser("AMF");
         em.merge(c); 
         em.getTransaction().commit();        
     }
