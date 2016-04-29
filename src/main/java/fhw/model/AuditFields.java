@@ -33,8 +33,23 @@ public class AuditFields
         return(processedFlag); 
     }
     
-    public void setCrDt(Date d) { }
-    public void setUpDt(Date d) {}
-    public void setModUsr(String s) {}    
-    public void setProcFlg(Character c) {}        
+    protected void setCrDt(Date d) 
+    {
+        setCreateDate(createDate);
+    }
+    
+    protected void setUpDt(Date d) 
+    {
+        setUpdateDate(updateDate);
+    }
+    
+    protected void setModUsr(String s) 
+    {
+        setModifyUser(modifyUser);
+    }    
+    
+    protected void setProcFlg(Character c) 
+    {
+        setProcessedFlag(processedFlag);
+    }        
 }

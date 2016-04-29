@@ -22,7 +22,7 @@ public class Frank
 //        customerContact(em);
 //        customer(em);
 //        contactFind(em);
-        //contactSave(em);
+        contactSave(em);
         //contactRemove(em);
         contactUpdate(em);
     }
