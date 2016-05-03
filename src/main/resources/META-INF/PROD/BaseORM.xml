@@ -2,19 +2,19 @@
 <entity-mappings xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm"
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                  xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence/orm http://xmlns.jcp.org/xml/ns/persistence/orm_2_1.xsd"
-                 version="2.1">               
-    
+                 version="2.1">
+
     <mapped-superclass class="fhw.model.AuditFields">
-<!--        
+<!--
         <entity-listeners>
             <entity-listener
                 class="com.pin.services.api.businesslogic.AuditFieldsEntityListener">
                 <pre-persist method-name="onCreate"></pre-persist>
                 <pre-update method-name="onUpdate"></pre-update>
-            </entity-listener> 
+            </entity-listener>
 
         </entity-listeners>
--->        
+-->
         <attributes>
             <basic name="createDate">
                 <column name="CRT_DT"/>
@@ -29,18 +29,11 @@
             </basic>
             <basic name="processedFlag">
                 <column name="PROC_FLG"/>
-            </basic>            
-        </attributes>
-    </mapped-superclass>
-
-<!--
-    <mapped-superclass class="com.pin.services.api.businesslogic.model.Versionable">
-        <attributes>
-            <version name="versionNumber">
-                <column name="VERSION_NUMBER"/>
+            </basic>
+            <version name="version" >
+                <column name="VERSION_NUMBER" />
             </version>
         </attributes>
     </mapped-superclass>
--->
 
 </entity-mappings>

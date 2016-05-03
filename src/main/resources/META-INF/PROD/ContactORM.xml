@@ -26,12 +26,12 @@
             </basic>
             <basic name="type">
                 <column name="CUST_CNTC_TYP_ID" table="CUST_CNTC"/>
-            </basic>            
+            </basic>
             <basic name="customerId">
                 <column name="CUST_ID" table="CUST_CNTC"/>
             </basic>
 
-            
+
 
             <basic name="crDt" access="PROPERTY">
                 <column name="CRT_DT" table="CUST_CNTC" />
@@ -39,31 +39,21 @@
             </basic>
             <basic name="upDt" access="PROPERTY">
                 <column name="UPD_DT" table="CUST_CNTC"/>
-                <temporal>TIMESTAMP</temporal>                
+                <temporal>TIMESTAMP</temporal>
             </basic>
-            
+
             <basic name="modUsr" access="PROPERTY">
                 <column name="MOD_USR_ID" table="CUST_CNTC" />
-            </basic>                       
-            
+            </basic>
+
             <basic name="procFlg" access="PROPERTY">
                 <column name="PROC_FLG" table="CUST_CNTC" />
-            </basic>                                   
-            
-            
-<!--            <basic name="createDate" access="PROPERTY">
-                <column name="CRT_DT" table="CUST_CNTC" />
-                <temporal>DATE</temporal>
             </basic>
-            <basic name="updateDate" access="PROPERTY">
-                <column name="UPD_DT" table="CUST_CNTC"/>
-                <temporal>DATE</temporal>                
+
+            <basic  name="verNum" access="PROPERTY">
+                <column name="VERSION_NUMBER" table="CUST_CNTC" />
             </basic>
-            
-            <basic name="lastUserToModify" access="PROPERTY">
-                <column name="MOD_USR_ID" table="CUST_CNTC" />
-            </basic>                       
--->                        
+
         </attributes>
     </entity>
 </entity-mappings>

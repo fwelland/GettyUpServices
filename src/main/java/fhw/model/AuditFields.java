@@ -7,49 +7,59 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AuditFields
-{    
+{
     private Date createDate;
     private Date updateDate;
     private String modifyUser;
-    private Character processedFlag;    
+    private Character processedFlag;
+    private long version;
 
     public Date getCrDt()
     {
-        return(createDate); 
+        return(createDate);
     }
-    
+
     public Date getUpDt()
     {
-        return(updateDate); 
+        return(updateDate);
     }
 
     public String getModUsr()
     {
-        return(modifyUser); 
+        return(modifyUser);
     }
-    
+
     public Character getProcFlg()
     {
-        return(processedFlag); 
+        return(processedFlag);
     }
-    
-    protected void setCrDt(Date d) 
+
+    protected void setCrDt(Date d)
     {
         setCreateDate(createDate);
     }
-    
-    protected void setUpDt(Date d) 
+
+    protected void setUpDt(Date d)
     {
         setUpdateDate(updateDate);
     }
-    
-    protected void setModUsr(String s) 
+
+    protected void setModUsr(String s)
     {
         setModifyUser(modifyUser);
-    }    
-    
-    protected void setProcFlg(Character c) 
+    }
+
+    protected void setProcFlg(Character c)
     {
         setProcessedFlag(processedFlag);
-    }        
+    }
+
+    protected void setVerNum(long l)
+    {
+    }
+
+    protected long getVerNum()
+    {
+        return(version);
+    }
 }
