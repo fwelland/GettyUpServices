@@ -3,11 +3,13 @@
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                  xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence/orm http://xmlns.jcp.org/xml/ns/persistence/orm_2_1.xsd"
                  version="2.1">
-    <entity class="fhw.model.Contact">
+    <entity class="fhw.model.CustomerContact">
         <table name="CNTC"/>
         <secondary-table name="CUST_CNTC"  >
             <primary-key-join-column name="CNTC_ID" />
         </secondary-table>
+        
+        
         <attributes>
             <id name="id">
                 <column name="CNTC_ID" />
@@ -30,9 +32,7 @@
             <basic name="customerId">
                 <column name="CUST_ID" table="CUST_CNTC"/>
             </basic>
-
-
-
+            
             <basic name="crDt" access="PROPERTY">
                 <column name="CRT_DT" table="CUST_CNTC" />
                 <temporal>TIMESTAMP</temporal>

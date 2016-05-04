@@ -5,7 +5,7 @@
     
     <mapping-file>META-INF/PROD/BaseORM.xml</mapping-file>    
     <mapping-file>META-INF/PROD/CustomerORM.xml</mapping-file>
-    <mapping-file>META-INF/PROD/ContactORM.xml</mapping-file>
+    <mapping-file>META-INF/PROD/CustomerContactORM.xml</mapping-file>
 
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527//home/fwelland/Databases/Prod"/>

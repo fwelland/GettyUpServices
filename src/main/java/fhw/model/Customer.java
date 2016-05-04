@@ -47,7 +47,6 @@ public class Customer
     private Character otherIdType;
     private Character customerStatus;
     private Character citizenshipCodeId;
-    private String unifiedTaxId;
-    private List<Contact> contacts;
+    private String unifiedTaxId;   
     private List<CustomerContact> customerContacts; 
 }

@@ -21,7 +21,12 @@ public class AuditFields
 
     public Date getUpDt()
     {
-        return(updateDate);
+        Date d = null; 
+        if(null != updateDate)
+        {
+            d = new Date(updateDate.getTime()); 
+        }
+        return(d);
     }
 
     public String getModUsr()
@@ -41,16 +46,16 @@ public class AuditFields
 
     protected void setUpDt(Date d)
     {
-        //setUpdateDate(updateDate);
+        
     }
 
     protected void setModUsr(String s)
     {
-        //setModifyUser(modifyUser);
+        
     }
 
     protected void setProcFlg(Character c)
     {
-        //setProcessedFlag(processedFlag);
+        
     }
 }

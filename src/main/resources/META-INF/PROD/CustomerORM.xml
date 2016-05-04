@@ -119,8 +119,7 @@
             <basic name="unifiedTaxId">
                 <column name="unified_tax_id" insertable="false" updatable="false" />
             </basic>
-            <transient name="contacts"/>
-<!--            <one-to-many name="customerContacts"  mapped-by="customer"/>-->
+            <transient name="customerContacts"/>
         </attributes>
     </entity>
 </entity-mappings>

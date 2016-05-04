@@ -1,6 +1,6 @@
+
 package fhw.model;
 
-import java.util.Date;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,16 +9,16 @@ import lombok.ToString;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString(exclude = "customer")
+@ToString
 public class CustomerContact
+    extends AuditFields
 {
+    private Long id;
     private Long customerId;
-    private Long contactId;
-    private Long type;
-    private Date createDate;
-    private Date updateDate;
-    private String lastUserToModify;
-    private Character processedFlag;
+    private String name;
+    private String firstName;
+    private String middleName;
+    private String lastName;
+    private Integer type;
 
-    private Customer customer;
 }
