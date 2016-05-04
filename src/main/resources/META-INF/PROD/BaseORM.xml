@@ -32,7 +32,7 @@
             </basic>
             <version name="version" >
                 <column name="VERSION_NUMBER" />
-            </version>
+            </version>            
         </attributes>
     </mapped-superclass>
 

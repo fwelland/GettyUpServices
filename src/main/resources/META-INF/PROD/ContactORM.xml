@@ -31,8 +31,6 @@
                 <column name="CUST_ID" table="CUST_CNTC"/>
             </basic>
 
-
-
             <basic name="crDt" access="PROPERTY">
                 <column name="CRT_DT" table="CUST_CNTC" />
                 <temporal>TIMESTAMP</temporal>
@@ -48,12 +46,7 @@
 
             <basic name="procFlg" access="PROPERTY">
                 <column name="PROC_FLG" table="CUST_CNTC" />
-            </basic>
-
-            <basic  name="verNum" access="PROPERTY">
-                <column name="VERSION_NUMBER" table="CUST_CNTC" />
-            </basic>
-
+            </basic>                                    
         </attributes>
     </entity>
 </entity-mappings>

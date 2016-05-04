@@ -21,7 +21,7 @@ public class Frank
 //        customerContact(em);
 //        customer(em);
 //        contactFind(em);
-        contactSave(em);
+        //contactSave(em);
         //contactRemove(em);
         contactUpdate(em);
     }
@@ -99,8 +99,8 @@ public class Frank
     {
         em.getTransaction().begin();
         Contact c = em.find(Contact.class, -8945L);
-        c.setName("Matt Ratt");
-        c.setType(6);
+        //c.setName("Matt Ratt");
+        c.setType(8);
         c.setUpdateDate(new Date());
         c.setModifyUser("AMF");
         em.merge(c);

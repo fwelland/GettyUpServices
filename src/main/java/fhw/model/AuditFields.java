@@ -53,13 +53,4 @@ public class AuditFields
     {
         setProcessedFlag(processedFlag);
     }
-
-    protected void setVerNum(long l)
-    {
-    }
-
-    protected long getVerNum()
-    {
-        return(version);
-    }
 }
