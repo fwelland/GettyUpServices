@@ -1,5 +1,6 @@
 package fhw.model;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,10 +10,9 @@ import lombok.Setter;
 public class AuditFields
 {
     private Date createDate;
-    private Date updateDate;
+    private Timestamp updateDate;
     private String modifyUser;
     private Character processedFlag;
-    private long version;
 
     public Date getCrDt()
     {
@@ -36,30 +36,21 @@ public class AuditFields
 
     protected void setCrDt(Date d)
     {
-        setCreateDate(createDate);
+        //setCreateDate(createDate);
     }
 
     protected void setUpDt(Date d)
     {
-        setUpdateDate(updateDate);
+        //setUpdateDate(updateDate);
     }
 
     protected void setModUsr(String s)
     {
-        setModifyUser(modifyUser);
+        //setModifyUser(modifyUser);
     }
 
     protected void setProcFlg(Character c)
     {
-        setProcessedFlag(processedFlag);
-    }
-
-    protected void setVerNum(long l)
-    {
-    }
-
-    protected long getVerNum()
-    {
-        return(version);
+        //setProcessedFlag(processedFlag);
     }
 }

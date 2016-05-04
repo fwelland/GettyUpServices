@@ -20,19 +20,15 @@
                 <column name="CRT_DT"/>
                 <temporal>TIMESTAMP</temporal>
             </basic>
-            <basic name="updateDate">
+            <version name="updateDate" >
                 <column name="UPD_DT"/>
-                <temporal>TIMESTAMP</temporal>
-            </basic>
+            </version>
             <basic name="modifyUser">
                 <column name="MOD_USR_ID"/>
             </basic>
             <basic name="processedFlag">
                 <column name="PROC_FLG"/>
             </basic>
-            <version name="version" >
-                <column name="VERSION_NUMBER" />
-            </version>
         </attributes>
     </mapped-superclass>
 

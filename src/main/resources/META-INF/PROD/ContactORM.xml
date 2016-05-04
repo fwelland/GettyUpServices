@@ -50,10 +50,6 @@
                 <column name="PROC_FLG" table="CUST_CNTC" />
             </basic>
 
-            <basic  name="verNum" access="PROPERTY">
-                <column name="VERSION_NUMBER" table="CUST_CNTC" />
-            </basic>
-
         </attributes>
     </entity>
 </entity-mappings>

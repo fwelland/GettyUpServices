@@ -11,7 +11,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class Contact
-        extends AuditFields
+    extends AuditFields
 {
     private Long id;
     private Long customerId;

@@ -80,7 +80,6 @@ public class Frank
         c.setMiddleName("H");
         c.setProcessedFlag('S');
         c.setCreateDate(d);
-        c.setUpdateDate(d);
         c.setModifyUser("fhw");
         c.setType(1);
         em.persist(c);
@@ -101,7 +100,6 @@ public class Frank
         Contact c = em.find(Contact.class, -8945L);
         c.setName("Matt Ratt");
         c.setType(6);
-        c.setUpdateDate(new Date());
         c.setModifyUser("AMF");
         em.merge(c);
         em.getTransaction().commit();
