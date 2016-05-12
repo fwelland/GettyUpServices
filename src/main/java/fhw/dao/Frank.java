@@ -21,7 +21,7 @@ public class Frank
 //        contactFind(em);
         contactSave(em);
         //contactRemove(em);
-        //contactUpdate(em);
+        contactUpdate(em);
     }
 
 

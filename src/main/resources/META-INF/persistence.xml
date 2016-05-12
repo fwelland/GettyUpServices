@@ -8,11 +8,22 @@
     <mapping-file>META-INF/PROD/CustomerContactORM.xml</mapping-file>
 
     <properties>
+        
+      <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@dev1d112.promnetwork.com:1521:PINDEV"/>
+      <property name="javax.persistence.jdbc.user" value="prod"/>
+      <property name="javax.persistence.jdbc.driver" value="oracle.jdbc.OracleDriver"/>
+      <property name="javax.persistence.jdbc.password" value="prod"/>
+      <property name="eclipselink.logging.level" value="FINE"/>        
+                
+        
+<!--        
       <property name="javax.persistence.jdbc.url" value="jdbc:derby://localhost:1527//home/fwelland/Databases/Prod"/>
       <property name="javax.persistence.jdbc.user" value="APP"/>
       <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.ClientDriver"/>
       <property name="javax.persistence.jdbc.password" value="APP"/>
       <property name="eclipselink.logging.level" value="FINE"/>
+--> 
+
     </properties>
   </persistence-unit>
 </persistence>
