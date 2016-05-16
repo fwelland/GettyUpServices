@@ -1,4 +1,5 @@
 apply plugin: 'java'
+apply plugin: 'groovy'
 
 sourceCompatibility = '1.8'
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
@@ -19,8 +20,15 @@ dependencies {
     compile 'org.eclipse.persistence:org.eclipse.persistence.jpa:2.6.2'
     compile 'org.apache.derby:derbyclient:10.12.1.1'    
     compile "com.oracle:ojdbc:11.2.0.3.0"
+    compile 'javax.validation:validation-api:1.1.0.Final'        
 
-    testCompile group: 'junit', name: 'junit', version: '4.10'
+    
+    testCompile 'junit:junit:4.12'    
+    testCompile "org.spockframework:spock-core:1.0-groovy-2.4"    
+    testCompile "com.blogspot.toomuchcoding:spock-subjects-collaborators-extension:1.1.0"
+    testCompile"com.athaydes:spock-reports:1.2.5"
+    testCompile "org.hibernate:hibernate-validator:5.2.4.Final"        
+    testCompile "org.glassfish:javax.el:3.0.0"    
 }
 
 compileJava{
