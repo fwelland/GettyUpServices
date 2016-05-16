@@ -19,7 +19,7 @@ public class Frank
 //        customerContact(em);
 //        customer(em);
 //        contactFind(em);
-        contactSave(em);
+        //contactSave(em);
         //contactRemove(em);
         contactUpdate(em);
     }
@@ -72,7 +72,7 @@ public class Frank
         CustomerContact c = em.find(CustomerContact.class, -8945L);
         c.setName("Matt Ratt");
         c.setType(6);
-        c.setModifyUser("AMF");
+        c.setModifyUser("YYY");
         em.merge(c);
         em.getTransaction().commit();
     }

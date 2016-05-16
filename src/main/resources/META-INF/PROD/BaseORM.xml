@@ -29,6 +29,11 @@
             <basic name="processedFlag">
                 <column name="PROC_FLG"/>
             </basic>
+            
+            <version name="versionId">
+                <column name="version"   />                
+            </version>
+                        
         </attributes>
     </mapped-superclass>
 

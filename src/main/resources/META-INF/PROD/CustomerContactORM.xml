@@ -8,8 +8,7 @@
         <secondary-table name="CNTC"  >
             <primary-key-join-column name="CNTC_ID" />
         </secondary-table>
-        
-        
+                
         <attributes>
             <id name="id">
                 <column name="CNTC_ID" />
@@ -37,10 +36,12 @@
                 <column name="CRT_DT" table="CNTC" />
                 <temporal>TIMESTAMP</temporal>
             </basic>
+            
             <basic name="upDt" access="PROPERTY">
                 <column name="UPD_DT" table="CNTC"/>
                 <temporal>TIMESTAMP</temporal>
             </basic>
+            
 
             <basic name="modUsr" access="PROPERTY">
                 <column name="MOD_USR_ID" table="CNTC" />

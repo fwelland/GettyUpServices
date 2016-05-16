@@ -13,6 +13,7 @@ public class AuditFields
     private Timestamp updateDate;
     private String modifyUser;
     private Character processedFlag;
+    private long versionId; 
 
     public Date getCrDt()
     {
@@ -21,12 +22,13 @@ public class AuditFields
 
     public Date getUpDt()
     {
-        Date d = null; 
-        if(null != updateDate)
-        {
-            d = new Date(updateDate.getTime()); 
-        }
-        return(d);
+//        Date d = null; 
+//        if(null != updateDate)
+//        {
+//            d = new Date(updateDate.getTime()); 
+//        }
+//        return(d);
+        return(new Date(updateDate.getTime())); 
     }
 
     public String getModUsr()

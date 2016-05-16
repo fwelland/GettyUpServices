@@ -19,6 +19,5 @@ public class CustomerContact
     private String firstName;
     private String middleName;
     private String lastName;
-    private Integer type;
-
+    private Integer type;    
 }
