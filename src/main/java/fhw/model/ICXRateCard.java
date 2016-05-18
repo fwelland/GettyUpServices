@@ -11,7 +11,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public abstract class IcxRateCard
+public abstract class ICXRateCard
 {
     @NotNull
     @Min(value=0,groups = {ICDValidatorGroup.class} )

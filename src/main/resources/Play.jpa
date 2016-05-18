@@ -9,7 +9,7 @@
             <basic attribute-type="String" visibile="true" name="processedFlag" id="_146187385863322"/>
         </jpa:attributes>
     </jpa:mapped-superclass>
-    <jpa:entity xre="false" sm="false" abs="false" class="CUST" superclassId="_1461873540892" visibile="true" minimized="false" rootElement="_14616090036032" id="_1461609376829">
+    <jpa:entity xre="false" sm="false" abs="false" class="Customer" superclassId="_1461873540892" visibile="true" minimized="false" rootElement="_14616090036032" id="_1461609376829">
         <jpa:attributes>
             <basic attribute-type="String" visibile="true" name="bankId" id="_146187634842827"/>
             <basic attribute-type="String" visibile="true" name="branchId" id="_146187634902228"/>
@@ -42,16 +42,6 @@
         <ct>java.util.Collection</ct>
     </jpa:c>
     <jpa:diagram>
-        <plane elementRef="_14616090036032">
-            <shape elementRef="_1461609376829">
-                <Bounds x="81.0" y="222.0" width="166.0" height="218.0"/>
-            </shape>
-            <shape elementRef="_1461873912682">
-                <Bounds x="350.0" y="238.0" width="215.0" height="186.0"/>
-            </shape>
-            <shape elementRef="_1461873540892">
-                <Bounds x="190.0" y="20.0" width="171.0" height="135.0"/>
-            </shape>
-        </plane>
+        <plane elementRef="_14616090036032"/>
     </jpa:diagram>
 </jpa:entity-mappings>
