@@ -5,35 +5,21 @@
                  version="2.1">
 
     <mapped-superclass class="fhw.model.AuditFields">
-<!--
-        <entity-listeners>
-            <entity-listener
-                class="com.pin.services.api.businesslogic.AuditFieldsEntityListener">
-                <pre-persist method-name="onCreate"></pre-persist>
-                <pre-update method-name="onUpdate"></pre-update>
-            </entity-listener>
-
-        </entity-listeners>
--->
         <attributes>
             <basic name="createDate">
                 <column name="CRT_DT"/>
                 <temporal>TIMESTAMP</temporal>
             </basic>
-            <version name="updateDate" >
+            <basic name="updateDate" >
                 <column name="UPD_DT"/>
-            </version>
+            </basic>
             <basic name="modifyUser">
                 <column name="MOD_USR_ID"/>
             </basic>
             <basic name="processedFlag">
                 <column name="PROC_FLG"/>
             </basic>
-            
-            <version name="versionId">
-                <column name="version"   />                
-            </version>
-                        
+                                    
         </attributes>
     </mapped-superclass>
 

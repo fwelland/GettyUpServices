@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<entity-mappings xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence/orm http://xmlns.jcp.org/xml/ns/persistence/orm_2_1.xsd"
+                 version="2.1">
+    <entity class="fhw.model.IcdRateCard">
+        <table name="ICD_RT_CARD"/>
+                
+        <attributes>
+            <id name="id">
+                <column name="ICD_RT_CRD_ID" />
+            </id>
+            <basic name="name">
+                <column name="CNTC_NM" table="CNTC" />
+            </basic>
+            <basic name="firstName">
+                <column name="CNTC_FRST_NM" table="CNTC" />
+            </basic>
+            <basic name="middleName">
+                <column name="CNTC_MDL_NM" table="CNTC" />
+            </basic>
+            <basic name="lastName">
+                <column name="CNTC_LAST_NM" table="CNTC" />
+            </basic>
+            <basic name="type">
+                <column name="CUST_CNTC_TYP_ID"/>
+            </basic>
+            <basic name="customerId">
+                <column name="CUST_ID" />
+            </basic>
+            
+            <basic name="crDt" access="PROPERTY">
+                <column name="CRT_DT" table="CNTC" />
+                <temporal>TIMESTAMP</temporal>
+            </basic>
+            
+            <basic name="upDt" access="PROPERTY">
+                <column name="UPD_DT" table="CNTC"/>
+                <temporal>TIMESTAMP</temporal>
+            </basic>
+            
+
+            <basic name="modUsr" access="PROPERTY">
+                <column name="MOD_USR_ID" table="CNTC" />
+            </basic>
+
+            <basic name="procFlg" access="PROPERTY">
+                <column name="PROC_FLG" table="CNTC" />
+            </basic>
+
+        </attributes>
+    </entity>
+</entity-mappings>
