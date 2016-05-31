@@ -7,61 +7,10 @@ import javax.validation.groups.*
 import java.sql.*
 import groovy.sql.*
 
-class RateCardSpecification
+class RateCardSpecificationJPA
     extends Specification
 {
-
-//    def Validator validator
-//
-//    def setup()
-//    {
-//        ValidatorFactory vf = Validation.buildDefaultValidatorFactory();
-//        validator = vf.getValidator();
-//    }
-//
-//    def "violate non-null for an ICS rate card id"()
-//    {
-//        given:
-//            def icsrtcrd = new ICSRateCard();
-//
-//        when:
-//           def Set<ConstraintViolation<ICSRateCard>> violations = validator.validate(icsrtcrd)
-//
-//        then:
-//            0 < violations.size()
-//            violations.each{ println "${it}"  }
-//    }
-//
-//    def "violate natural number restriction for rate card that is an ICD card "()
-//    {
-//        given:
-//            def rtcrd = new ICDRateCard();
-//            rtcrd.setId(-9)
-//
-//        when:
-//           def Set<ConstraintViolation<ICSRateCard>> violations = validator.validate(rtcrd, Default.class, ICDValidatorGroup.class)
-//
-//        then:
-//            0 < violations.size()
-//            violations.each{ println "${it}"  }
-//    }
-//
-//
-//    def "violate must be negative restriction for rate card that is an ICS card "()
-//    {
-//        given:
-//            def rtcrd = new ICSRateCard();
-//            rtcrd.setId(9)
-//
-//        when:
-//           def Set<ConstraintViolation<ICSRateCard>> violations = validator.validate(rtcrd, Default.class, ICSValidatorGroup.class)
-//
-//        then:
-//            0 < violations.size()
-//            violations.each{ println "${it}"  }
-//    }
-
-    
+   
     def EntityManagerFactory emf
     def EntityManager em 
     def Sql sql
@@ -94,7 +43,14 @@ class RateCardSpecification
             em.getTransaction().commit()
             
         then:
-            sql.rows('select * from ICS_RT_CRD where ICS_RT_CRD_ID =?.id ', id:rtcrd.id ).size() == 1
+//            Exception e = thrown()
+            (e instanceof PersistenceException) || (e instanceof ConstraintViolationException )
+            if( e instanceof ConstraintViolationException)
+            {
+                def cve = (ConstraintViolationException)e
+                cve.getConstraintViolations().each{ println "${it}"} 
+            }
+            //sql.rows('select * from ICS_RT_CRD where ICS_RT_CRD_ID =?.id ', id:rtcrd.id ).size() == 1
 
         cleanup: 
             sql.execute( 'delete from ICS_RT_CRD where ICS_RT_CRD_ID =?.id ', id:rtcrd.id )
