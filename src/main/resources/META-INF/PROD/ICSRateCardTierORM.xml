@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<entity-mappings xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence/orm http://xmlns.jcp.org/xml/ns/persistence/orm_2_1.xsd"
+                 version="2.1">
+    <entity class="fhw.model.ICSRateCardTier">
+        <table name="ICS_RT_CRD_TIER"/>
+                        
+        <attributes>
+            <id name="id">
+                <column name="ICS_RT_CRD_TIER_ID" />
+            </id>
+            <basic name="bankId">
+                <column name="BNK_ID" />
+            </basic>
+            <basic name="programId">
+                <column name="PRGM_ID" />
+            </basic>
+            <basic name="balanceThreshhold">
+                <column name="BALANCE_THRESHHOLD" />
+            </basic>
+            <basic name="rateType">
+                <column name="RT_TYP"  />
+            </basic>
+            <basic name="indexCode">
+                <column name="INDEX_CD"/>
+            </basic>
+            <basic name="spread">
+                <column name="SPREAD" />
+            </basic>
+            
+            <basic name="fixedRate">
+                <column name="FIXED_RT" />
+            </basic>            
+            
+            <basic name="updateDate" >
+                <column name="UPD_DT" />
+                <convert converter="fhw.model.LocalDateTimeAttributeConverter"/>
+                <temporal>TIMESTAMP</temporal>
+            </basic>
+        
+            <basic name="createDate" >
+                <column name="CRT_DT"/>
+                <convert converter="fhw.model.LocalDateTimeAttributeConverter"/>
+                <temporal>TIMESTAMP</temporal>
+            </basic>            
+            
+            <basic name="modUserId" >
+                <column name="MOD_USR_ID"/>
+            </basic>
+
+        </attributes>
+    </entity>
+</entity-mappings>

@@ -1,12 +1,14 @@
 package fhw.model
 
-import spock.lang.Specification
+import spock.lang.*
 import javax.persistence.*
 import javax.validation.*
 import javax.validation.groups.*
 import java.sql.*
 import groovy.sql.*
 
+
+@Ignore
 class RateCardSpecificationJPA
     extends Specification
 {

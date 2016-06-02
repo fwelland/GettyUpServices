@@ -9,6 +9,9 @@
     <mapping-file>META-INF/PROD/ICXRateCardORM.xml</mapping-file>
     <mapping-file>META-INF/PROD/ICSRateCardORM.xml</mapping-file>
     <mapping-file>META-INF/PROD/ICDRateCardORM.xml</mapping-file>
+    <mapping-file>META-INF/PROD/ICSRateCardTierORM.xml</mapping-file>    
+    
+    <class>fhw.model.LocalDateTimeAttributeConverter</class>
     
 <!--   
     <validation-mode>AUTO</validation-mode>
