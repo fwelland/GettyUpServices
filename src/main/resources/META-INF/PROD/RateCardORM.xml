@@ -5,19 +5,28 @@
                  version="2.1">
     <entity class="fhw.model.RateCard">
         <table name="RATECARD"/>
-
+        
+        <named-query name="findByBankIdAndProgramId">
+            <query>
+                select rc from RateCard rc where rc.bankId = :bankId and rc.programId = :programId
+            </query>
+        </named-query>
+        
         <attributes>
             <id name="bankId" />
             <id name="programId"/>
             <basic name="name" />
-            <transient name="tiers"/>
-
-            <one-to-many name="tiers" target-entity="fhw.model.ICSRateCardTier" >
-                <join-column name="bankId"  referenced-column-name="bnk_id" />
-                <join-column name="programId"  referenced-column-name="prgm_id" />
+            
+<!--            target-entity="fhw.model.ICSRateCardTier"-->
+            
+            <one-to-many name="tiers" orphan-removal="true" fetch="EAGER">
+                <join-column name="bnk_Id"  referenced-column-name="bankid" />
+                <join-column name="prgm_Id"  referenced-column-name="programid" />
+            
                 <cascade>
                     <cascade-all />
                 </cascade>
+
             </one-to-many>
 
         </attributes>

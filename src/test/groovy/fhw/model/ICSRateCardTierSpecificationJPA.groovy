@@ -155,7 +155,5 @@ class ICSRateCardTierSpecificationJPA
         cleanup:
             sql.execute( "delete from ICS_RT_CRD_TIER where ICS_RT_CRD_TIER_ID in ( ${ids} )".toString() )
     }
-
-
 }
 
