@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<entity-mappings xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence/orm http://xmlns.jcp.org/xml/ns/persistence/orm_2_1.xsd"
+                 version="2.1">
+    <entity class="fhw.model.RateCard">
+        <table name="RATECARD"/>
+
+        <attributes>
+            <id name="bankId" />
+            <id name="programId"/>
+            <basic name="name" />
+            <transient name="tiers"/>
+
+            <one-to-many name="tiers" target-entity="fhw.model.ICSRateCardTier" >
+                <join-column name="bankId"  referenced-column-name="bnk_id" />
+                <join-column name="programId"  referenced-column-name="prgm_id" />
+                <cascade>
+                    <cascade-all />
+                </cascade>
+            </one-to-many>
+
+        </attributes>
+    </entity>
+
+<!--
+            <many-to-one name="ower" fetch="LAZY">
+                <join-column name="OWNER_ID"/>
+            </many-to-one>
+
+
+
+    <embeddable class="fhw.model.RateCard.RateCardPK">
+
+    </embeddable>
+-->
+</entity-mappings>

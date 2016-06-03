@@ -11,25 +11,25 @@ import java.time.*
 class ICSRateCardTierSpecificationJPA
     extends Specification
 {
-   
+
     def EntityManagerFactory emf
-    def EntityManager em 
+    def EntityManager em
     def Sql sql
-    
-    def setup() 
+
+    def setup()
     {
         emf = Persistence.createEntityManagerFactory("ProdPU")
-        em = emf.createEntityManager()        
-        def props = emf.getProperties(); 
+        em = emf.createEntityManager()
+        def props = emf.getProperties();
         sql = Sql.newInstance( props['javax.persistence.jdbc.url'], props['javax.persistence.jdbc.user'], props['javax.persistence.jdbc.password'], props['javax.persistence.jdbc.driver'])
     }
-        
+
     def cleanup()
-    {       
-        sql?.close()        
+    {
+        sql?.close()
         em?.close()
     }
-    
+
     @Ignore
     def "simple insert of a rate card tier"()
     {
@@ -47,20 +47,20 @@ class ICSRateCardTierSpecificationJPA
 
 
         when:
-            em.getTransaction().begin()          
+            em.getTransaction().begin()
             em.persist(tier)
             em.getTransaction().commit()
-            
-        then:            
+
+        then:
             sql.rows('select * from ICS_RT_CRD_TIER where ICS_RT_CRD_TIER_ID =?.id ', id:tier.id).size() == 1
 
-        cleanup: 
+        cleanup:
             sql.execute( 'delete from ICS_RT_CRD_TIER where ICS_RT_CRD_TIER_ID =?.id ', id:tier.id )
-    }   
-    
+    }
+
     @Ignore
     def "Add a Few and Remove a Few Rate Card Tiers"()
-    {        
+    {
         def Integer startId = -72
         def tierList = []
         4.times{
@@ -80,22 +80,20 @@ class ICSRateCardTierSpecificationJPA
         }
 
         when:
-            em.getTransaction().begin()          
+            em.getTransaction().begin()
             tierList.each{ t-> em.persist(t) }
             em.getTransaction().commit()
-            
-        then:                        
-            def ids = tierList.collect {  "(${it.id})" }.join(',')                        
-            sql.rows("select ICS_RT_CRD_TIER_ID from ICS_RT_CRD_TIER where ICS_RT_CRD_TIER_ID in ( ${ids} )".toString()).size() == 4                
-        
-        cleanup: 
+
+        then:
+            def ids = tierList.collect {  "(${it.id})" }.join(',')
+            sql.rows("select ICS_RT_CRD_TIER_ID from ICS_RT_CRD_TIER where ICS_RT_CRD_TIER_ID in ( ${ids} )".toString()).size() == 4
+
+        cleanup:
             sql.execute( "delete from ICS_RT_CRD_TIER where ICS_RT_CRD_TIER_ID in ( ${ids} )".toString() )
-    }       
-    
-    
-    
-    def "Add a some rate tier to DB, load them, remove one, in memory, add a new one in memory, then merge"()
-    {        
+    }
+
+    def "Add a some rate tiers to DB, load them, change one in memory then merge that individual one"()
+    {
         def Integer startId = -72
         def bId = -98
         def tierList = []
@@ -114,55 +112,50 @@ class ICSRateCardTierSpecificationJPA
             startId += -1
             tierList.add(tier)
         }
-        def ids = tierList.collect {  "(${it.id})" }.join(',')  
+        def ids = tierList.collect {  "(${it.id})" }.join(',')
         ids = ids + ',-80'
-        em.getTransaction().begin()          
+        em.getTransaction().begin()
         tierList.each{ t-> em.persist(t) }
-        em.getTransaction().commit()        
-        
+        em.getTransaction().commit()
+
         when:
-            def query = em.createQuery("SELECT t FROM ICSRateCardTier t where t.bankId = ?1", ICSRateCardTier.class);    
-            query.setParameter(1, bId);                         
-            def List tiers = query.getResultList();                    
-            
-        then:                                    
+            def query = em.createQuery("SELECT t FROM ICSRateCardTier t where t.bankId = ?1", ICSRateCardTier.class);
+            query.setParameter(1, bId);
+            def List tiers = query.getResultList();
+
+        then:
             tiers.size() == 4
-            
-        when: 
-            tiers.removeAll { it.balanceThreshhold == 2000000 }
-            
-        then: 
-            tiers.size() == 3 
-            
-        when: 
-            def tier = new ICSRateCardTier()
-            tier.id = -80
-            tier.bankId = bId
-            tier.programId = 4
-            tier.balanceThreshhold =  2000000
-            tier.rateType = 1
-            tier.spread = 1
-            tier.fixedRate = 1
-            tier.createDate = LocalDateTime.now()
-            tier.updateDate = LocalDateTime.now()
-            tier.modUserId = "Oh No Mr. Bill"            
-            tiers.add(tier)
-            
-        then: 
-            tiers.size() == 4 
-            
-        when: 
-            em.getTransaction().begin()          
-            em.merge(tiers)
-            em.getTransaction().commit()                
-            
-        then: 
-            true
-            
-        cleanup: 
+
+        when:
+            def rex = tiers.find{ it.balanceThreshhold == 2000000 }
+
+
+        then:
+            rex
+
+        when:
+            rex.rateType = 1
+            rex.spread = 1
+            rex.fixedRate = 1
+            rex.createDate = LocalDateTime.now()
+            rex.updateDate = LocalDateTime.now()
+            rex.modUserId = "Oh No Mr. Bill"
+
+        then:
+            em.getTransaction().begin()
+            em.merge(rex)
+            em.getTransaction().commit()
+
+        then:
+            sql.eachRow("select * from ICS_RT_CRD_TIER WHERE ICS_RT_CRD_TIER_ID = ${rex.id}")
+            {
+                row -> "Oh No Mr. Bill" == row.MOD_USR_ID
+            }
+
+        cleanup:
             sql.execute( "delete from ICS_RT_CRD_TIER where ICS_RT_CRD_TIER_ID in ( ${ids} )".toString() )
-    }           
-    
-    
+    }
+
+
 }
 
