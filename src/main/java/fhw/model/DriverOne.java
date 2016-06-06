@@ -1,17 +1,20 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package fhw.model;
 
-/**
- *
- * @author fwelland
- */
 public  class DriverOne
         extends Driver
 {
-         
-    
+
+    public static void main(String args[])
+    {
+        new DriverOne().run(args);
+    }
+
+    @Override
+    public int go()
+    {
+       System.out.println("gone!");
+       return(0);
+    }
+
+
 }

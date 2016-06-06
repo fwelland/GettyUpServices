@@ -4,14 +4,24 @@
                  xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence/orm http://xmlns.jcp.org/xml/ns/persistence/orm_2_1.xsd"
                  version="2.1">
     <entity class="fhw.model.ICSRateCardTier">
-        
-        <table name="ICS_RT_CRD_TIER" >                        
+        <table name="ICS_RT_CRD_TIER" >
+
+<!--
             <unique-constraint  name="foo" >
                 <column-name>BNK_ID</column-name>
                 <column-name>PRGM_ID</column-name>
-                <column-name>BALANCE_THRESHHOLD</column-name>                
+                <column-name>BALANCE_THRESHHOLD</column-name>
             </unique-constraint>
-        </table>                        
+-->
+
+        </table>
+
+        <named-query name="removeTiers">
+            <query>
+                delete from ICSRateCardTier irct where irct.bankId = :bankId and irct.programId = :programId
+            </query>
+        </named-query>
+
         <attributes>
             <id name="id">
                 <column name="ICS_RT_CRD_TIER_ID" />
@@ -34,26 +44,26 @@
             <basic name="spread">
                 <column name="SPREAD" />
             </basic>
-            
+
             <basic name="fixedRate">
                 <column name="FIXED_RT" />
-            </basic>            
-            
+            </basic>
+
             <basic name="updateDate" >
                 <column name="UPD_DT" />
                 <convert converter="fhw.model.LocalDateTimeAttributeConverter"/>
                 <temporal>TIMESTAMP</temporal>
             </basic>
-        
+
             <basic name="createDate" >
                 <column name="CRT_DT"/>
                 <convert converter="fhw.model.LocalDateTimeAttributeConverter"/>
                 <temporal>TIMESTAMP</temporal>
-            </basic>            
-            
+            </basic>
+
             <basic name="modUserId" >
                 <column name="MOD_USR_ID"/>
-            </basic> 
-        </attributes>        
+            </basic>
+        </attributes>
     </entity>
 </entity-mappings>
