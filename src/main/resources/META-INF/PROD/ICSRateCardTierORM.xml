@@ -21,6 +21,12 @@
                 delete from ICSRateCardTier irct where irct.bankId = :bankId and irct.programId = :programId
             </query>
         </named-query>
+        
+        <named-query name="ICSRateCardTier.findByBankIdAndProgramId">
+            <query>
+                select irct from ICSRateCardTier irct where irct.bankId = :bankId and irct.programId = :programId
+            </query>
+        </named-query>        
 
         <attributes>
             <id name="id">

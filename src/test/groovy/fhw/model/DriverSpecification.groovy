@@ -7,20 +7,20 @@ class DriverSpecification
 {
     def "test the run method in abstract driver"()
     {
-        Driver drvr = new Driver()
-        {
-
-            public int go()
-            {
-                return(0);
-            }
-        }
-
-        when:
-            drvr.run(null)
-            true
-
-        then:
-            true
+//        Driver drvr = new Driver()
+//        {
+//
+//            public int go()
+//            {
+//                return(0);
+//            }
+//        }
+//
+//        when:
+//            drvr.run(null)
+//            true
+//
+//        then:
+//            true
     }
 }
