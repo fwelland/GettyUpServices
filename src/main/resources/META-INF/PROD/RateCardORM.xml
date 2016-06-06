@@ -16,19 +16,16 @@
             <id name="bankId" />
             <id name="programId"/>
             <basic name="name" />
-            <transient name="tiers"/>
 
-<!-- 
-            target-entity="fhw.model.ICSRateCardTier" 
-
-            <one-to-many name="tiers" orphan-removal="true" fetch="EAGER" >
+            <one-to-many name="tiers" fetch="EAGER" >
                 <join-column name="bnk_Id"  referenced-column-name="bankid" />
                 <join-column name="prgm_Id"  referenced-column-name="programid" />
                 <cascade>
-                    <cascade-persist/>
+                    <cascade-all/>
                 </cascade>
             </one-to-many>
--->                
+
+
         </attributes>
     </entity>
 
