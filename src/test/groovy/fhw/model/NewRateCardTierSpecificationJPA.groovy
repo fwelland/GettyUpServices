@@ -269,7 +269,7 @@ class NewRateCardTierSpecificationJPA
 
     
     @IgnoreRest    
-    def "NIP: do a remove then persist of a rate card w tiers where there was a tier delete then add using em remove and persist"()
+    def "NIP: do a remove then persist of a rate card w tiers where there was a tier delete then add using em remove and persist and no cascade"()
     {
         def theBankId = -678
         def progId =  57
@@ -299,10 +299,12 @@ class NewRateCardTierSpecificationJPA
             q.setParameter("bankId", theBankId)
             q.setParameter("programId", progId)
             def RateCard rc = q.getSingleResult()
-            em.
-//            em.getTransaction().commit()
-                    
-            //em.clear()
+            q = em.createNamedQuery("ICSRateCardTier.findByBankIdAndProgramId")
+            q.setParameter("bankId", theBankId)
+            q.setParameter("programId", progId)            
+            rc.setTiers(q.getResultList())
+            rc.tiers.each{ t -> em.detach(t) }
+            em.getTransaction().commit()
     
         then:
             rc
@@ -338,45 +340,36 @@ class NewRateCardTierSpecificationJPA
             rc.tiers.size()==4
 
         when: 
-//            em.getTransaction().begin()
+            em.getTransaction().begin()
             q = em.createNamedQuery("removeTiers");
             q.setParameter("bankId", theBankId)
             q.setParameter("programId", progId)
-            println "foo"
             def updateCount = q.executeUpdate()
-            println "bar"
-            em.flush()
             
         then:
             4 == updateCount
             
         when: 
+            rc.tiers.each{ t -> em.persist(t) }
             em.merge(rc)
-            em.flush()            
             em.getTransaction().commit()
-            em.clear()
-            println "finished something!!!"
                        
         then:
-            true
-            println "now in the then lowdown"
-//        
-//            sql.rows("select * from ratecard where bankId = ?.bid and programId = ?.pid", bid:theBankId, pid:progId).size() == 1
-//            sql.rows("select * from ics_rt_crd_tier where bnk_Id = ?.bid and prgm_id = ?.pid", bid:theBankId, pid:progId).size() == 4
-//            sql.eachRow("select * from ratecard where bankId = ${theBankId} and programId = ${progId}")
-//            { row ->
-//                "Fido" == row.NAME
-//            }
-//            sql.eachRow("select * from ics_rt_crd_tier where ICS_RT_CRD_TIER_ID = ${startId}")
-//            { row ->
-//                "I am the new one"  == row.MOD_USR_ID
-//                2000000 == row.BALANCE_THRESHHOLD
-//            }        
+            sql.rows("select * from ratecard where bankId = ?.bid and programId = ?.pid", bid:theBankId, pid:progId).size() == 1
+            sql.rows("select * from my_ics_rt_crd_tier where bnk_Id = ?.bid and prgm_id = ?.pid", bid:theBankId, pid:progId).size() == 4
+            sql.eachRow("select * from ratecard where bankId = ${theBankId} and programId = ${progId}")
+            { row ->
+                "Fido" == row.NAME
+            }
+            sql.eachRow("select * from my_ics_rt_crd_tier where ICS_RT_CRD_TIER_ID = ${startId}")
+            { row ->
+                "I am the new one"  == row.MOD_USR_ID
+                2000000 == row.BALANCE_THRESHHOLD
+            }        
 
         cleanup:
-            println "clean up!!!!"
-//            sql.execute("delete from ratecard where bankId = ?.bid and programId = ?.pid", bid:theBankId, pid:progId)
-//            sql.execute("delete from ics_rt_crd_tier where bnk_Id = ?.bid and prgm_id = ?.pid", bid:theBankId, pid:progId)
+            sql.execute("delete from ratecard where bankId = ?.bid and programId = ?.pid", bid:theBankId, pid:progId)
+            sql.execute("delete from my_ics_rt_crd_tier where bnk_Id = ?.bid and prgm_id = ?.pid", bid:theBankId, pid:progId)
     }
 
     def "do a remove then merge of a rate card w tiers where there was a tier delete then add; this will clear tiers prior to merge"()
