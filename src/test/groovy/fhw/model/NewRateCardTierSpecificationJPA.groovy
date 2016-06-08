@@ -144,8 +144,7 @@ class NewRateCardTierSpecificationJPA
         return e
     }
 
-    @IgnoreRest
-    def "NIP: load ratecard with cascade-all; remove a tier in memory; add one in; and then try to save/merger"()
+    def "NIP: load ratecard with cascade-all; remove a tier in memory; add one in; and then try to save/merge and make sure a constraint violation happens"()
     {
         when:     "pretend like we ask services for RateCard object with tiers"
             em.getTransaction().begin()
@@ -198,6 +197,64 @@ class NewRateCardTierSpecificationJPA
             c
             c instanceof SQLIntegrityConstraintViolationException            
     }
+    
+
+    @IgnoreRest
+    def "NIP: load ratecard with cascade-all; remove a tier in memory; add one in; and then try to save/merge - but this time see if we can save"()
+    {
+        when:     "pretend like we ask services for RateCard object with tiers"
+            em.getTransaction().begin()
+            def q = em.createNamedQuery("findByBankIdAndProgramId")
+            q.setParameter("bankId", theBankId)
+            q.setParameter("programId", progId)
+            def RateCard rc = q.getSingleResult()
+            em.getTransaction().commit()
+            
+        then:   "Lets inspect to make sure the rate card is loaded like we think..."
+            rc
+            "Hector" == rc.name
+            null != rc.tiers
+            rc.tiers.size() == 4 
+
+        when:   "Pretend like we are UI and we need to remove a tier" 
+            def removedSomething = rc.tiers.removeAll{ it.balanceThreshhold == 2000000 }
+
+        then:   "Lets check to see if the in-memory copy seems to have removed a tiers"
+            removedSomething
+            rc.tiers.size() == 3
+
+        when:       "Pretend like UI is adding a new tier exactly like one removed (and tinker with ratecard)."        
+            startId += -1
+            rc.name = "Fido"
+            def newTier = new ICSRateCardTier();
+            newTier.id = startId
+            newTier.bankId = theBankId
+            newTier.programId = progId
+            newTier.balanceThreshhold =  2000000
+            newTier.rateType = 3
+            newTier.spread = 3
+            newTier.fixedRate = 3
+            newTier.createDate = LocalDateTime.now()
+            newTier.updateDate = LocalDateTime.now()
+            newTier.modUserId = "I am the new one"
+            rc.addTier(newTier)
+
+        then:   "Lets check to see if that add worked"
+            rc.tiers.size() == 4
+            
+        when:    "Ok now lets pretend the UI is saving; detach tiers, null out tiers attr, merge and then persist tiers"        
+            em.getTransaction().begin()            
+            rc.tiers.each{ t -> em.detach(t) }
+            def tiers = rc.tiers
+            rc.tiers = null; 
+            em.merge(rc)
+            tiers.each{ t -> em.persist(t) }
+            em.getTransaction().commit()
+        
+        then:       "Let check to see we got a constraint violation"
+            true
+    }    
+    
     
     def "use no cascade; do a remove then merge of a rate card w tiers where there was a tier delete then add; this will clear tiers prior to merge"()
     {
