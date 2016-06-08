@@ -18,15 +18,15 @@
             <basic name="name" />
 
 
-            <transient name="tiers"/>
+<!--            <transient name="tiers"/>-->
             
-<!--            <one-to-many name="tiers" fetch="EAGER" >
+            <one-to-many name="tiers" fetch="EAGER" >
                 <join-column name="bnk_Id"  referenced-column-name="bankid" />
                 <join-column name="prgm_Id"  referenced-column-name="programid" />
                 <cascade>
                     <cascade-all/>
                 </cascade>
-            </one-to-many>-->
+            </one-to-many>
 
 
         </attributes>
