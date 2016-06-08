@@ -13,10 +13,10 @@ repositories {
        //url 'https://oss.sonatype.org/'
        url 'https://oss.sonatype.org/service/local/repositories/snapshots/content'
     }
-//    maven
-//    {
-//        url 'https://artifactory.promnetwork.com/artifactory/list/pin-repository/'
-//    }
+    maven
+    {
+        url 'https://artifactory.promnetwork.com/artifactory/list/pin-repository/'
+    }
 }
 
 dependencies {
@@ -31,7 +31,7 @@ dependencies {
     compile 'org.eclipse.persistence:org.eclipse.persistence.jpa:2.7.0-SNAPSHOT'
     //compile 'org.apache.openjpa:openjpa:2.4.1'
     compile 'org.apache.derby:derbyclient:10.12.1.1'
-    //compile "com.oracle:ojdbc:11.2.0.3.0"
+    compile "com.oracle:ojdbc:11.2.0.3.0"
 
     testCompile 'junit:junit:4.12'
     testCompile "org.spockframework:spock-core:1.0-groovy-2.4"

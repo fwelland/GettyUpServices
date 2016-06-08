@@ -17,13 +17,15 @@
             <id name="programId"/>
             <basic name="name" />
 
-            <one-to-many name="tiers" fetch="EAGER" >
+            <transient name="tiers"/>
+            
+<!--            <one-to-many name="tiers" fetch="EAGER" >
                 <join-column name="bnk_Id"  referenced-column-name="bankid" />
                 <join-column name="prgm_Id"  referenced-column-name="programid" />
                 <cascade>
                     <cascade-all/>
                 </cascade>
-            </one-to-many>
+            </one-to-many>-->
 
 
         </attributes>
