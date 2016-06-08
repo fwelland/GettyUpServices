@@ -10,270 +10,20 @@ import java.time.*
 class NewRateCardTierSpecificationJPA
     extends Specification
 {
-
     def EntityManagerFactory emf
     def EntityManager em
     def Sql sql
-
+    def theBankId = -678
+    def progId =  57
+    def startId = -343    
+    
     def setup()
     {
         emf = Persistence.createEntityManagerFactory("ProdPU")
         em = emf.createEntityManager()
         def props = emf.getProperties();
-        sql = Sql.newInstance( props['javax.persistence.jdbc.url'], props['javax.persistence.jdbc.user'], props['javax.persistence.jdbc.password'], props['javax.persistence.jdbc.driver'])
-    }
-
-    def cleanup()
-    {
-        sql?.close()
-        em?.close()
-    }
-
-    def "simple insert of a rate card"()
-    {
-        def rc = new RateCard();
-        rc.bankId = -678
-        rc.programId = 57
-        rc.name = "Hector"
-
-
-        when:
-            em.getTransaction().begin()
-            em.persist(rc)
-            em.getTransaction().commit()
-
-        then:
-            sql.rows("select * from ratecard where bankId = ?.bid and programId = ?.pid", bid:rc.bankId, pid:rc.programId).size() == 1
-
-        cleanup:
-            sql.execute("delete from ratecard where bankId = ?.bid and programId = ?.pid", bid:rc.bankId, pid:rc.programId)
-
-    }
-
-    def "simple insert of a rate card with a tier"()
-    {
-        def rc = new RateCard();
-        rc.bankId = -678
-        rc.programId = 57
-        rc.name = "Hector"
-
-        def tier = new ICSRateCardTier();
-        tier.id = -675
-        tier.bankId = rc.bankId
-        tier.programId = rc.programId
-        tier.balanceThreshhold =  1000000
-        tier.rateType = 1
-        tier.spread = 1
-        tier.fixedRate = 1
-        tier.createDate = LocalDateTime.now()
-        tier.updateDate = LocalDateTime.now()
-        tier.modUserId = "frankie"
-
-        rc.addTier(tier)
-
-        when:
-            em.getTransaction().begin()
-            em.persist(rc)
-            em.getTransaction().commit()
-
-        then:
-            sql.rows("select * from ratecard where bankId = ?.bid and programId = ?.pid", bid:rc.bankId, pid:rc.programId).size() == 1
-            sql.rows("select * from ics_rt_crd_tier where bnk_Id = ?.bid and prgm_id = ?.pid", bid:rc.bankId, pid:rc.programId).size() == 1
-
-        cleanup:
-            sql.execute("delete from ratecard where bankId = ?.bid and programId = ?.pid", bid:rc.bankId, pid:rc.programId)
-            sql.execute("delete from ics_rt_crd_tier where bnk_Id = ?.bid and prgm_id = ?.pid", bid:rc.bankId, pid:rc.programId)
-
-    }
-
-
-    def "simple insert of a rate card with a few tiers"()
-    {
-        def theBankId = -678
-        def progId =  57
-        def startId = -343
-        def rc = new RateCard();
-        rc.bankId = theBankId
-        rc.programId = 57
-        rc.name = "Hector"
-
-        4.times{
-            def tier = new ICSRateCardTier();
-            tier.id = startId
-            tier.bankId = -98
-            tier.programId = 4
-            tier.balanceThreshhold =  (1000000 * (it + 1))
-            tier.rateType = 1
-            tier.spread = 1
-            tier.fixedRate = 1
-            tier.createDate = LocalDateTime.now()
-            tier.updateDate = LocalDateTime.now()
-            tier.modUserId = "frankie ${it}"
-            startId += -1
-            rc.addTier(tier)
-        }
-
-
-        when:
-            em.getTransaction().begin()
-            em.persist(rc)
-            em.getTransaction().commit()
-
-        then:
-            sql.rows("select * from ratecard where bankId = ?.bid and programId = ?.pid", bid:rc.bankId, pid:rc.programId).size() == 1
-            sql.rows("select * from ics_rt_crd_tier where bnk_Id = ?.bid and prgm_id = ?.pid", bid:rc.bankId, pid:rc.programId).size() == 4
-
-        cleanup:
-            sql.execute("delete from ratecard where bankId = ?.bid and programId = ?.pid", bid:rc.bankId, pid:rc.programId)
-            sql.execute("delete from ics_rt_crd_tier where bnk_Id = ?.bid and prgm_id = ?.pid", bid:rc.bankId, pid:rc.programId)
-
-    }
-
-
-    def "simple merge of a rate card w tiers"()
-    {
-        def theBankId = -678
-        def progId =  57
-        def startId = -343
-        def rc = new RateCard();
-        rc.bankId = theBankId
-        rc.programId = 57
-        rc.name = "Hector"
-
-        4.times{
-            def tier = new ICSRateCardTier();
-            tier.id = startId
-            tier.bankId = theBankId
-            tier.programId = progId
-            tier.balanceThreshhold =  (1000000 * (it + 1))
-            tier.rateType = 1
-            tier.spread = 1
-            tier.fixedRate = 1
-            tier.createDate = LocalDateTime.now()
-            tier.updateDate = LocalDateTime.now()
-            tier.modUserId = "frankie ${it}"
-            startId += -1
-            rc.addTier(tier)
-        }
-        em.getTransaction().begin()
-        em.persist(rc)
-        em.getTransaction().commit()
-
-        when:
-            def rex = rc.tiers.find{ it.balanceThreshhold == 2000000 }
-
-        then:
-            rex
-
-        when:
-            rc.name = "Fido"
-            def tierId = rex.id
-            rex.balanceThreshhold = 25000000
-            rex.modUserId = 'Homer'
-            em.getTransaction().begin()
-            em.merge(rc)
-            em.getTransaction().commit()
-
-        then:
-            sql.rows("select * from ratecard where bankId = ?.bid and programId = ?.pid", bid:rc.bankId, pid:rc.programId).size() == 1
-            sql.rows("select * from ics_rt_crd_tier where bnk_Id = ?.bid and prgm_id = ?.pid", bid:rc.bankId, pid:rc.programId).size() == 4
-            sql.eachRow("select * from ratecard where bankId = ${theBankId} and programId = ${progId}")
-            { row -> \
-                "Fido" == row.NAME
-            }
-            sql.eachRow("select * from ics_rt_crd_tier where ICS_RT_CRD_TIER_ID = ${tierId}")
-            { row -> \
-                "Homer" == row.MOD_USR_ID
-                25000000 == row.BALANCE_THRESHHOLD
-            }
-
-        cleanup:
-            sql.execute("delete from ratecard where bankId = ?.bid and programId = ?.pid", bid:rc.bankId, pid:rc.programId)
-            sql.execute("delete from ics_rt_crd_tier where bnk_Id = ?.bid and prgm_id = ?.pid", bid:rc.bankId, pid:rc.programId)
-    }
-
-    def "do a merge of a rate card w tiers where there was a tier delete then add"()
-    {
-        def theBankId = -678
-        def progId =  57
-        def startId = -343
-        def rc = new RateCard();
-        rc.bankId = theBankId
-        rc.programId = 57
-        rc.name = "Hector"
-
-        4.times{
-            def tier = new ICSRateCardTier();
-            tier.id = startId
-            tier.bankId = theBankId
-            tier.programId = progId
-            tier.balanceThreshhold =  (1000000 * (it + 1))
-            tier.rateType = 1
-            tier.spread = 1
-            tier.fixedRate = 1
-            tier.createDate = LocalDateTime.now()
-            tier.updateDate = LocalDateTime.now()
-            tier.modUserId = "frankie ${it}"
-            startId += -1
-            rc.addTier(tier)
-        }
-        em.getTransaction().begin()
-        em.persist(rc)
-        em.getTransaction().commit()
-
-
-        when:
-            def removedSomething = rc.tiers.removeAll{ it.balanceThreshhold == 2000000 }
-
-        then:
-            removedSomething
-            rc.tiers.size() == 3
-
-        when:
-            startId += -1
-            rc.name = "Fido"
-            def newTier = new ICSRateCardTier();
-            newTier.id = startId
-            newTier.bankId = theBankId
-            newTier.programId = progId
-            newTier.balanceThreshhold =  2000000
-            newTier.rateType = 3
-            newTier.spread = 3
-            newTier.fixedRate = 3
-            newTier.createDate = LocalDateTime.now()
-            newTier.updateDate = LocalDateTime.now()
-            newTier.modUserId = "I am the new one"
-            rc.addTier(newTier)
-
-            em.getTransaction().begin()
-            em.merge(rc)
-            em.getTransaction().commit()
-
-        then:
-            sql.rows("select * from ratecard where bankId = ?.bid and programId = ?.pid", bid:rc.bankId, pid:rc.programId).size() == 1
-            sql.rows("select * from ics_rt_crd_tier where bnk_Id = ?.bid and prgm_id = ?.pid", bid:rc.bankId, pid:rc.programId).size() == 4
-            sql.eachRow("select * from ratecard where bankId = ${theBankId} and programId = ${progId}")
-            { row -> \
-                "Fido" == row.NAME
-            }
-            sql.eachRow("select * from ics_rt_crd_tier where ICS_RT_CRD_TIER_ID = ${startId}")
-            { row -> \
-                "I am the new one"  == row.MOD_USR_ID
-                2000000 == row.BALANCE_THRESHHOLD
-            }
-
-        cleanup:
-            sql.execute("delete from ratecard where bankId = ?.bid and programId = ?.pid", bid:rc.bankId, pid:rc.programId)
-            sql.execute("delete from ics_rt_crd_tier where bnk_Id = ?.bid and prgm_id = ?.pid", bid:rc.bankId, pid:rc.programId)
-    }
-
-    
-    @IgnoreRest    
-    def "NIP: do a remove then persist of a rate card w tiers where there was a tier delete then add using em remove and persist and no cascade"()
-    {
-        def theBankId = -678
-        def progId =  57
-        def startId = -343
+        sql = Sql.newInstance( props['javax.persistence.jdbc.url'], props['javax.persistence.jdbc.user'], props['javax.persistence.jdbc.password'], props['javax.persistence.jdbc.driver'])               
+        
         sql.execute("insert into ratecard(bankid,programid,name)\n\
                      values (${theBankId},${progId},'Hector')".toString())
 
@@ -291,9 +41,22 @@ class NewRateCardTierSpecificationJPA
                     'frankie ${it}')".toString())
             startId += -1
         }
-        sql.commit()
+        sql.commit()                
+        
+    }
 
-        when:
+    def cleanup()
+    {        
+        em?.close()        
+        sql?.execute("delete from ratecard where bankId = ?.bid and programId = ?.pid", bid:theBankId, pid:progId)
+        sql?.execute("delete from my_ics_rt_crd_tier where bnk_Id = ?.bid and prgm_id = ?.pid", bid:theBankId, pid:progId)        
+        sql?.close()
+    }
+            
+    @IgnoreRest    
+    def "NIP: do a remove then persist of a rate card w tiers where there was a tier delete then add using em remove and persist and no cascade"()
+    {
+        when:     "pretend like we ask services for RateCard object with tiers"
             em.getTransaction().begin()
             def q = em.createNamedQuery("findByBankIdAndProgramId")
             q.setParameter("bankId", theBankId)
@@ -306,20 +69,20 @@ class NewRateCardTierSpecificationJPA
             rc.tiers.each{ t -> em.detach(t) }
             em.getTransaction().commit()
     
-        then:
+        then:     "Pretend like we are the UI expecting some dispaly of rate cards and tiers "
             rc
             "Hector" == rc.name
             null != rc.tiers
             rc.tiers.size() == 4 
             
-        when:
+        when:       "Pretend like we are the UI making a change; removing a tier"
             def removedSomething = rc.tiers.removeAll{ it.balanceThreshhold == 2000000 }
 
-        then:
+        then:       "Lets just check that remove worked"
             removedSomething
             rc.tiers.size() == 3
             
-        when:
+        when:       "Pretend like we are UI and we decide to add a new tier that looks like the one we just removed (also change the ratecard name)"
             startId += -1
             rc.name = "Fido"
             def newTier = new ICSRateCardTier();
@@ -335,26 +98,26 @@ class NewRateCardTierSpecificationJPA
             newTier.modUserId = "I am the new one"
             rc.addTier(newTier)
             
-        then: 
+        then:       "Lets just check to make sure that worked (in memory)"
             "Fido" == rc.name
             rc.tiers.size()==4
 
-        when: 
+        when:       "Ok, now lets pretend the 'save' button was hit: start tx and remove existing tiers"
             em.getTransaction().begin()
             q = em.createNamedQuery("removeTiers");
             q.setParameter("bankId", theBankId)
             q.setParameter("programId", progId)
             def updateCount = q.executeUpdate()
             
-        then:
+        then:       "lets see if that seems to work (TX will not allow us to use 'sql' to actually ask DB about this)"
             4 == updateCount
             
-        when: 
+        when:       "Finally, persist tiers and merge the rate card and commit tx"
             rc.tiers.each{ t -> em.persist(t) }
             em.merge(rc)
             em.getTransaction().commit()
                        
-        then:
+        then:       "Lets check DB to see that things happened like we want"
             sql.rows("select * from ratecard where bankId = ?.bid and programId = ?.pid", bid:theBankId, pid:progId).size() == 1
             sql.rows("select * from my_ics_rt_crd_tier where bnk_Id = ?.bid and prgm_id = ?.pid", bid:theBankId, pid:progId).size() == 4
             sql.eachRow("select * from ratecard where bankId = ${theBankId} and programId = ${progId}")
@@ -366,10 +129,6 @@ class NewRateCardTierSpecificationJPA
                 "I am the new one"  == row.MOD_USR_ID
                 2000000 == row.BALANCE_THRESHHOLD
             }        
-
-        cleanup:
-            sql.execute("delete from ratecard where bankId = ?.bid and programId = ?.pid", bid:theBankId, pid:progId)
-            sql.execute("delete from my_ics_rt_crd_tier where bnk_Id = ?.bid and prgm_id = ?.pid", bid:theBankId, pid:progId)
     }
 
     def "do a remove then merge of a rate card w tiers where there was a tier delete then add; this will clear tiers prior to merge"()
@@ -648,6 +407,211 @@ class NewRateCardTierSpecificationJPA
             sql.execute("delete from ratecard where bankId = ?.bid and programId = ?.pid", bid:theBankId, pid:progId)
             sql.execute("delete from ics_rt_crd_tier where bnk_Id = ?.bid and prgm_id = ?.pid", bid:theBankId, pid:progId)
     }    
+
+        
+    def "simple insert of a rate card"()
+    {
+        def rc = new RateCard();
+        rc.bankId =  theBankId
+        rc.programId = progId
+        rc.name = "Hector"
+
+        when:
+            em.getTransaction().begin()
+            em.persist(rc)
+            em.getTransaction().commit()
+
+        then:
+            sql.rows("select * from ratecard where bankId = ?.bid and programId = ?.pid", bid:rc.bankId, pid:rc.programId).size() == 1
+    }    
+                
+    def "simple insert of a rate card with a tier"()
+    {
+        def rc = new RateCard();
+        rc.bankId = theBankId
+        rc.programId = progId
+        rc.name = "Hector"
+
+        def tier = new ICSRateCardTier();
+        tier.id = -675
+        tier.bankId = rc.bankId
+        tier.programId = rc.programId
+        tier.balanceThreshhold =  1000000
+        tier.rateType = 1
+        tier.spread = 1
+        tier.fixedRate = 1
+        tier.createDate = LocalDateTime.now()
+        tier.updateDate = LocalDateTime.now()
+        tier.modUserId = "frankie"
+        rc.addTier(tier)
+
+        when:
+            em.getTransaction().begin()
+            em.persist(rc)
+            em.getTransaction().commit()
+
+        then:
+            sql.rows("select * from ratecard where bankId = ?.bid and programId = ?.pid", bid:rc.bankId, pid:rc.programId).size() == 1
+            sql.rows("select * from ics_rt_crd_tier where bnk_Id = ?.bid and prgm_id = ?.pid", bid:rc.bankId, pid:rc.programId).size() == 1
+
+    }    
+    
+
+    def "simple insert of a rate card with a few tiers"()
+    {
+        def rc = new RateCard();
+        rc.bankId = theBankId
+        rc.programId = progId
+        rc.name = "Hector"
+
+        4.times{
+            def tier = new ICSRateCardTier();
+            tier.id = startId
+            tier.bankId = -98
+            tier.programId = 4
+            tier.balanceThreshhold =  (1000000 * (it + 1))
+            tier.rateType = 1
+            tier.spread = 1
+            tier.fixedRate = 1
+            tier.createDate = LocalDateTime.now()
+            tier.updateDate = LocalDateTime.now()
+            tier.modUserId = "frankie ${it}"
+            startId += -1
+            rc.addTier(tier)
+        }
+
+        when:
+            em.getTransaction().begin()
+            em.persist(rc)
+            em.getTransaction().commit()
+
+        then:
+            sql.rows("select * from ratecard where bankId = ?.bid and programId = ?.pid", bid:rc.bankId, pid:rc.programId).size() == 1
+            sql.rows("select * from ics_rt_crd_tier where bnk_Id = ?.bid and prgm_id = ?.pid", bid:rc.bankId, pid:rc.programId).size() == 4
+
+    }    
     
     
+    def "simple merge of a rate card w tiers"()
+    {
+        def rc = new RateCard();
+        rc.bankId = theBankId
+        rc.programId = progId
+        rc.name = "Hector"
+
+        4.times{
+            def tier = new ICSRateCardTier();
+            tier.id = startId
+            tier.bankId = theBankId
+            tier.programId = progId
+            tier.balanceThreshhold =  (1000000 * (it + 1))
+            tier.rateType = 1
+            tier.spread = 1
+            tier.fixedRate = 1
+            tier.createDate = LocalDateTime.now()
+            tier.updateDate = LocalDateTime.now()
+            tier.modUserId = "frankie ${it}"
+            startId += -1
+            rc.addTier(tier)
+        }
+        em.getTransaction().begin()
+        em.persist(rc)
+        em.getTransaction().commit()
+
+        when:
+            def rex = rc.tiers.find{ it.balanceThreshhold == 2000000 }
+
+        then:
+            rex
+
+        when:
+            rc.name = "Fido"
+            def tierId = rex.id
+            rex.balanceThreshhold = 25000000
+            rex.modUserId = 'Homer'
+            em.getTransaction().begin()
+            em.merge(rc)
+            em.getTransaction().commit()
+
+        then:
+            sql.rows("select * from ratecard where bankId = ?.bid and programId = ?.pid", bid:rc.bankId, pid:rc.programId).size() == 1
+            sql.rows("select * from ics_rt_crd_tier where bnk_Id = ?.bid and prgm_id = ?.pid", bid:rc.bankId, pid:rc.programId).size() == 4
+            sql.eachRow("select * from ratecard where bankId = ${theBankId} and programId = ${progId}")
+            { row -> \
+                "Fido" == row.NAME
+            }
+            sql.eachRow("select * from ics_rt_crd_tier where ICS_RT_CRD_TIER_ID = ${tierId}")
+            { row -> \
+                "Homer" == row.MOD_USR_ID
+                25000000 == row.BALANCE_THRESHHOLD
+            }
+    }
+
+    def "do a merge of a rate card w tiers where there was a tier delete then add"()
+    {
+        def rc = new RateCard();
+        rc.bankId = theBankId
+        rc.programId = progId
+        rc.name = "Hector"
+
+        4.times{
+            def tier = new ICSRateCardTier();
+            tier.id = startId
+            tier.bankId = theBankId
+            tier.programId = progId
+            tier.balanceThreshhold =  (1000000 * (it + 1))
+            tier.rateType = 1
+            tier.spread = 1
+            tier.fixedRate = 1
+            tier.createDate = LocalDateTime.now()
+            tier.updateDate = LocalDateTime.now()
+            tier.modUserId = "frankie ${it}"
+            startId += -1
+            rc.addTier(tier)
+        }
+        em.getTransaction().begin()
+        em.persist(rc)
+        em.getTransaction().commit()
+
+
+        when:
+            def removedSomething = rc.tiers.removeAll{ it.balanceThreshhold == 2000000 }
+
+        then:
+            removedSomething
+            rc.tiers.size() == 3
+
+        when:
+            startId += -1
+            rc.name = "Fido"
+            def newTier = new ICSRateCardTier();
+            newTier.id = startId
+            newTier.bankId = theBankId
+            newTier.programId = progId
+            newTier.balanceThreshhold =  2000000
+            newTier.rateType = 3
+            newTier.spread = 3
+            newTier.fixedRate = 3
+            newTier.createDate = LocalDateTime.now()
+            newTier.updateDate = LocalDateTime.now()
+            newTier.modUserId = "I am the new one"
+            rc.addTier(newTier)
+
+            em.getTransaction().begin()
+            em.merge(rc)
+            em.getTransaction().commit()
+
+        then:
+            sql.rows("select * from ratecard where bankId = ?.bid and programId = ?.pid", bid:rc.bankId, pid:rc.programId).size() == 1
+            sql.rows("select * from ics_rt_crd_tier where bnk_Id = ?.bid and prgm_id = ?.pid", bid:rc.bankId, pid:rc.programId).size() == 4
+            sql.eachRow("select * from ratecard where bankId = ${theBankId} and programId = ${progId}")
+            { row -> \
+                "Fido" == row.NAME
+            }
+            sql.eachRow("select * from ics_rt_crd_tier where ICS_RT_CRD_TIER_ID = ${startId}")
+            { row -> \
+                "I am the new one"  == row.MOD_USR_ID
+                2000000 == row.BALANCE_THRESHHOLD
+            }
+    }    
 }

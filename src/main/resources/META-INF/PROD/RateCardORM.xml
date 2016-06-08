@@ -16,6 +16,8 @@
             <id name="bankId" />
             <id name="programId"/>
             <basic name="name" />
+
+
             <transient name="tiers"/>
             
 <!--            <one-to-many name="tiers" fetch="EAGER" >
