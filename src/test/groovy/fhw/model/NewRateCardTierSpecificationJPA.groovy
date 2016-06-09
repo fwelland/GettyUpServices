@@ -244,10 +244,10 @@ class NewRateCardTierSpecificationJPA
             
         when:    "Ok now lets pretend the UI is saving; detach tiers, null out tiers attr, flush, then merge and then re-persist tiers"        
             em.getTransaction().begin()            
-            rc.tiers.each{ t -> em.detach(t) }
             def tiers = rc.tiers
+            //rc.tiers.each{ t -> em.detach(t) }
             rc.tiers = null; 
-            em.flush()
+            em.flush()                        
             em.merge(rc)
             tiers.each{ t -> em.persist(t) }
             em.getTransaction().commit()
