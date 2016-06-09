@@ -27,8 +27,9 @@ dependencies {
     compile 'org.projectlombok:lombok:1.16.8'
     compile "org.hibernate:hibernate-validator:5.2.4.Final"
     compile 'org.eclipse.persistence:javax.persistence:2.1.1'
+    compile 'org.eclipse.persistence:org.eclipse.persistence.jpa:2.6.0'    
     //compile 'org.eclipse.persistence:org.eclipse.persistence.jpa:2.6.3'
-    compile 'org.eclipse.persistence:org.eclipse.persistence.jpa:2.7.0-SNAPSHOT'
+    //compile 'org.eclipse.persistence:org.eclipse.persistence.jpa:2.7.0-SNAPSHOT'
     //compile 'org.apache.openjpa:openjpa:2.4.1'
     compile 'org.apache.derby:derbyclient:10.12.1.1'
     compile "com.oracle:ojdbc:11.2.0.3.0"

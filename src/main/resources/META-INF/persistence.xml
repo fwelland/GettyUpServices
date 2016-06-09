@@ -43,7 +43,7 @@
       <property name="javax.persistence.validation.group.pre-update"  value="fhw.model.ICSValidatorGroup"/>
         <property name="javax.persistence.validation.group.pre-update"  value="fhw.model.ICSValidatorGroup,fhw.model.ICDValidatorGroup"/>
 -->
-      <property name="eclipselink.logging.level" value="FINE"/>
+      <property name="eclipselink.logging.level" value="FINEST"/>
       <property name="eclipselink.target-server" value="None"/>
     </properties>
   </persistence-unit>
