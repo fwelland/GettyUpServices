@@ -242,17 +242,28 @@ class NewRateCardTierSpecificationJPA
         then:   "Lets check to see if that add worked"
             rc.tiers.size() == 4
             
-        when:    "Ok now lets pretend the UI is saving; detach tiers, null out tiers attr, merge and then persist tiers"        
+        when:    "Ok now lets pretend the UI is saving; detach tiers, null out tiers attr, flush, then merge and then re-persist tiers"        
             em.getTransaction().begin()            
             rc.tiers.each{ t -> em.detach(t) }
             def tiers = rc.tiers
             rc.tiers = null; 
+            em.flush()
             em.merge(rc)
             tiers.each{ t -> em.persist(t) }
             em.getTransaction().commit()
         
-        then:       "Let check to see we got a constraint violation"
-            true
+        then:       "Lets check DB to see that things happened like we want"
+            sql.rows("select * from ratecard where bankId = ?.bid and programId = ?.pid", bid:theBankId, pid:progId).size() == 1
+            sql.rows("select * from my_ics_rt_crd_tier where bnk_Id = ?.bid and prgm_id = ?.pid", bid:theBankId, pid:progId).size() == 4
+            sql.eachRow("select * from ratecard where bankId = ${theBankId} and programId = ${progId}")
+            { row ->
+                "Fido" == row.NAME
+            }
+            sql.eachRow("select * from my_ics_rt_crd_tier where ICS_RT_CRD_TIER_ID = ${startId}")
+            { row ->
+                "I am the new one"  == row.MOD_USR_ID
+                2000000 == row.BALANCE_THRESHHOLD
+            }        
     }    
     
     
