@@ -48,8 +48,8 @@ class NewRateCardTierSpecificationJPA
     def cleanup()
     {        
         em?.close()        
-        sql?.execute("delete from ratecard where bankId = ?.bid and programId = ?.pid", bid:theBankId, pid:progId)
-        sql?.execute("delete from my_ics_rt_crd_tier where bnk_Id = ?.bid and prgm_id = ?.pid", bid:theBankId, pid:progId)        
+//        sql?.execute("delete from ratecard where bankId = ?.bid and programId = ?.pid", bid:theBankId, pid:progId)
+//        sql?.execute("delete from my_ics_rt_crd_tier where bnk_Id = ?.bid and prgm_id = ?.pid", bid:theBankId, pid:progId)        
         sql?.close()
     }
             
@@ -245,10 +245,9 @@ class NewRateCardTierSpecificationJPA
         when:    "Ok now lets pretend the UI is saving; detach tiers, null out tiers attr, flush, then merge and then re-persist tiers"        
             em.getTransaction().begin()            
             def tiers = rc.tiers
-            //rc.tiers.each{ t -> em.detach(t) }
             rc.tiers = null; 
             em.flush()                        
-            em.merge(rc)
+            //em.merge(rc)
             tiers.each{ t -> em.persist(t) }
             em.getTransaction().commit()
         
