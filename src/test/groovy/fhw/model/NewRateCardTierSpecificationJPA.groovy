@@ -33,11 +33,19 @@ class NewRateCardTierSpecificationJPA
                              BNK_ID,\n\
                              PRGM_ID, \n\
                              BALANCE_THRESHHOLD,\n\
+                             RT_TYP, \n\
+                             INDEX_CD, \n\
+                             SPREAD, \n\
+                             FIXED_RT, \n\
                              MOD_USR_ID) \n\
             VALUES( ${startId},\n\
                     ${theBankId},\n\
                     ${progId},\n\
                     ${(1000000 * (it + 1))},\n\
+                    3, \n\
+                    3, \n\
+                    3, \n\
+                    3, \n\
                     'frankie ${it}')".toString())
             startId += -1
         }
@@ -48,8 +56,8 @@ class NewRateCardTierSpecificationJPA
     def cleanup()
     {        
         em?.close()        
-//        sql?.execute("delete from ratecard where bankId = ?.bid and programId = ?.pid", bid:theBankId, pid:progId)
-//        sql?.execute("delete from my_ics_rt_crd_tier where bnk_Id = ?.bid and prgm_id = ?.pid", bid:theBankId, pid:progId)        
+        sql?.execute("delete from ratecard where bankId = ?.bid and programId = ?.pid", bid:theBankId, pid:progId)
+        sql?.execute("delete from my_ics_rt_crd_tier where bnk_Id = ?.bid and prgm_id = ?.pid", bid:theBankId, pid:progId)        
         sql?.close()
     }
             
@@ -144,6 +152,7 @@ class NewRateCardTierSpecificationJPA
         return e
     }
 
+    @IgnoreRest        
     def "NIP: load ratecard with cascade-all; remove a tier in memory; add one in; and then try to save/merge and make sure a constraint violation happens"()
     {
         when:     "pretend like we ask services for RateCard object with tiers"
@@ -170,11 +179,12 @@ class NewRateCardTierSpecificationJPA
         when:       "Pretend like UI is adding a new tier exactly like one removed (and tinker with ratecard)."        
             startId += -1
             rc.name = "Fido"
-            def newTier = new ICSRateCardTier();
+            def ICSRateCardTier newTier = new ICSRateCardTier();
             newTier.id = startId
             newTier.bankId = theBankId
             newTier.programId = progId
             newTier.balanceThreshhold =  2000000
+            newTier.indexCode = 3
             newTier.rateType = 3
             newTier.spread = 3
             newTier.fixedRate = 3
@@ -199,7 +209,6 @@ class NewRateCardTierSpecificationJPA
     }
     
 
-    @IgnoreRest
     def "NIP: load ratecard with cascade-all; remove a tier in memory; add one in; and then try to save/merge - but this time see if we can save"()
     {
         when:     "pretend like we ask services for RateCard object with tiers"
@@ -231,6 +240,7 @@ class NewRateCardTierSpecificationJPA
             newTier.bankId = theBankId
             newTier.programId = progId
             newTier.balanceThreshhold =  2000000
+            newTier.indexCode = 3            
             newTier.rateType = 3
             newTier.spread = 3
             newTier.fixedRate = 3
