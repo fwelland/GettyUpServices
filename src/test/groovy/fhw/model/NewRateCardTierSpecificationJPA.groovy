@@ -151,8 +151,7 @@ class NewRateCardTierSpecificationJPA
         }
         return e
     }
-
-    @IgnoreRest        
+   
     def "NIP: load ratecard with cascade-all; remove a tier in memory; add one in; and then try to save/merge and make sure a constraint violation happens"()
     {
         when:     "pretend like we ask services for RateCard object with tiers"
@@ -208,7 +207,7 @@ class NewRateCardTierSpecificationJPA
             c instanceof SQLIntegrityConstraintViolationException            
     }
     
-
+    @IgnoreRest        
     def "NIP: load ratecard with cascade-all; remove a tier in memory; add one in; and then try to save/merge - but this time see if we can save"()
     {
         when:     "pretend like we ask services for RateCard object with tiers"
@@ -224,6 +223,13 @@ class NewRateCardTierSpecificationJPA
             "Hector" == rc.name
             null != rc.tiers
             rc.tiers.size() == 4 
+            em.contains(rc) == true
+            
+        when:
+            em.detach(rc)
+            
+        then: 
+            em.contains(rc) == false
 
         when:   "Pretend like we are UI and we need to remove a tier" 
             def removedSomething = rc.tiers.removeAll{ it.balanceThreshhold == 2000000 }
@@ -253,12 +259,21 @@ class NewRateCardTierSpecificationJPA
             rc.tiers.size() == 4
             
         when:    "Ok now lets pretend the UI is saving; detach tiers, null out tiers attr, flush, then merge and then re-persist tiers"        
-            em.getTransaction().begin()            
+            em.getTransaction().begin()     
+            q = em.createNamedQuery("removeTiers")
+            q.setParameter("bankId", theBankId)
+            q.setParameter("programId", progId)
+            def removed = q.executeUpdate()
+
+        then:
+            4 == removed        
+            4 == rc.tiers.size() 
+        
+        when:         
             def tiers = rc.tiers
-            rc.tiers = null; 
-            em.flush()                        
-            //em.merge(rc)
-            tiers.each{ t -> em.persist(t) }
+            rc.tiers = null;             
+            em.flush(rc)            
+            tiers.each{ t -> em.persist(t) }            
             em.getTransaction().commit()
         
         then:       "Lets check DB to see that things happened like we want"
