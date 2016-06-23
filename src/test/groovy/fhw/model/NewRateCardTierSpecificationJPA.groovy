@@ -272,7 +272,7 @@ class NewRateCardTierSpecificationJPA
         when:         
             def tiers = rc.tiers
             rc.tiers = null;             
-            em.flush(rc)            
+            em.merge(rc)            
             tiers.each{ t -> em.persist(t) }            
             em.getTransaction().commit()
         
