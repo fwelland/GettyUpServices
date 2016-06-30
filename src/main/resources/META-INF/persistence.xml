@@ -12,7 +12,6 @@
     <mapping-file>META-INF/PROD/ICSRateCardTierORM.xml</mapping-file>
     <mapping-file>META-INF/PROD/RateCardORM.xml</mapping-file>
     <mapping-file>META-INF/PROD/BankORM.xml</mapping-file>
-
     <class>fhw.model.LocalDateTimeAttributeConverter</class>
 
 <!--
@@ -20,10 +19,7 @@
     <class>fhw.model.ICSValidatorGroup</class>
 -->
 
-
     <properties>
-
-
       <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@dev1d112.promnetwork.com:1521:PINDEV"/>
       <property name="javax.persistence.jdbc.user" value="prod"/>
       <property name="javax.persistence.jdbc.driver" value="oracle.jdbc.OracleDriver"/>
@@ -43,8 +39,8 @@
       <property name="javax.persistence.validation.group.pre-persist" value="fhw.model.ICSValidatorGroup"/>
       <property name="javax.persistence.validation.group.pre-update"  value="fhw.model.ICSValidatorGroup"/>
         <property name="javax.persistence.validation.group.pre-update"  value="fhw.model.ICSValidatorGroup,fhw.model.ICDValidatorGroup"/>
+        <property name="eclipselink.logging.level" value="FINEST"/>        
 -->
-      <property name="eclipselink.logging.level" value="FINEST"/>
       <property name="eclipselink.target-server" value="None"/>
     </properties>
   </persistence-unit>

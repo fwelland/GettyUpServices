@@ -45,4 +45,37 @@ class BankIndexSpecification
         then:
             true
     }
+    
+    def "so make an index and search for an aba"()
+    {
+        given:
+            bi.createIndex()
+            
+        when:
+            bi.abaSearch("211173357")
+
+        then:
+            true
+    }    
+    
+    
+    @IgnoreRest
+    def "so make an index and search over several fields"(String searchVal)
+    {
+        given:
+            bi.createIndex()
+            
+        when:
+            bi.findBanksContaining(searchVal)
+
+        then:
+            true
+            
+        where: 
+                searchVal   | _
+                "Castle"    | _
+                "473"       | _
+                "301"       | _
+                "Bank"      | _
+    }        
 }
