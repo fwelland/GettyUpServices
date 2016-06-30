@@ -11,6 +11,7 @@
     <mapping-file>META-INF/PROD/ICDRateCardORM.xml</mapping-file>
     <mapping-file>META-INF/PROD/ICSRateCardTierORM.xml</mapping-file>
     <mapping-file>META-INF/PROD/RateCardORM.xml</mapping-file>
+    <mapping-file>META-INF/PROD/BankORM.xml</mapping-file>
 
     <class>fhw.model.LocalDateTimeAttributeConverter</class>
 
