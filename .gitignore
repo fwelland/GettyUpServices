@@ -6,3 +6,5 @@
 /.gradle/2.12/taskArtifacts/cache.properties.lock
 /.gradle/2.12/taskArtifacts/outputFileStates.bin
 /.gradle/2.12/taskArtifacts/cache.properties
+/nbproject/project.properties
+/.nb-gradle-properties

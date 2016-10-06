@@ -3,17 +3,20 @@ package fhw.model
 import spock.lang.Specification
 import javax.validation.*
 import javax.validation.groups.*
-
+import javax.validation.executable.*
+import java.lang.reflect.*
 
 class RateCardSpecification303
     extends Specification
 {
     def Validator validator
+    def ExecutableValidator evlad
 
     def setup()
     {
         ValidatorFactory vf = Validation.buildDefaultValidatorFactory();
         validator = vf.getValidator();
+        evlad = validator.forExecutables()
     }
 
     def "violate non-null for an ICS rate card id"()
@@ -57,6 +60,33 @@ class RateCardSpecification303
             0 < violations.size()
             violations.each{ println "${it}"  }
     }
+    
+    
+    def "test out the method level 303 non-null stuff "()
+    {
+        given:
+            def rtcrd = new ICSRateCard();
+            rtcrd.setId(-9)
+
+        when:
+            def Set<ConstraintViolation<ICSRateCard>> violations = validator.validate(rtcrd, Default.class, ICSValidatorGroup.class)
+        then:
+            0 == violations.size()
+        when:             
+            Method m = rtcrd.getClass().getMethod( "compute", Integer.class, Integer.class);  
+            
+        then: 
+            m            
+            
+        when: 
+           Object[] params = [ null, null ]        
+           Class[] groups = [Default.class]
+           violations = evlad.validateParameters(rtcrd,m,params,groups)
+            
+        then: 
+            violations.size() > 0 
+            violations.each{ println "${it}"  }
+    }    
     
 }
 

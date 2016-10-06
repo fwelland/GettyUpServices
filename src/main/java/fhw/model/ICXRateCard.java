@@ -22,4 +22,6 @@ public abstract class ICXRateCard
     private Integer type;
     private Long onewasySellIndicator;   
     private List<ICXRateTier> tiers; 
+    
+    public abstract Integer compute(@NotNull(message = "a can not be null") Integer a, @NotNull(message="b can not be null")Integer b); 
 }
